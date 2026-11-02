@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LoanMan - บันทึกยืม-คืนเงิน</title>
+<link rel="icon" type="image/svg+xml" href="assets/icon.svg"><link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest">
+<script>window.addEventListener('error',function(e){var b=document.getElementById('errbar');if(b&&e.message&&e.message!=='Script error.'){b.textContent='⚠ '+e.message;b.style.display='block';}});</script><script src="js/vendor/chart.umd.min.js?v=20261102165212"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="css/style.css?v=20261102165212"></head><body>
+<header><h1>💰 LoanMan</h1><nav id="nav">
+<button data-t="dash" class="on">ภาพรวม</button><button data-t="people">ลูกหนี้</button><button data-t="debtors">สัญญา</button><button data-t="txns">รายการยืม/คืน</button><button data-t="period">สรุปงวด</button><button data-t="pred">คาดการณ์</button><button data-t="setup">Setup</button><button data-t="data">ข้อมูล</button></nav>
+<span id="selWrap" style="margin-left:auto;color:#cfe0ff">สัญญา (สรุปงวด/คาดการณ์): <select id="selD"></select></span></header>
+<main>
+<section id="t-dash"><div class="kpis" id="kpis"></div>
+<div class="grid2"><div class="card"><h3>ยอดคงค้างตามเวลา</h3><canvas id="cBal"></canvas></div>
+<div class="card"><h3>รับคืนรายเดือน (ต้น/ดอก)</h3><canvas id="cPay"></canvas></div>
+<div class="card"><h3>สัดส่วนเงินต้นคงค้างตามลูกหนี้</h3><canvas id="cPie" style="max-height:300px"></canvas></div>
+<div class="card"><h3>สรุปตามลูกหนี้</h3><div class="tw" id="dashP"></div></div></div>
+<div class="card"><h3>สรุปตามสัญญา</h3><div class="tw" id="dashTbl"></div></div></section>
+
+<section id="t-people" class="hide"><div class="card"><h3>เพิ่ม/แก้ไขลูกหนี้</h3><div class="row">
+<input type="hidden" id="pId"><div><label>ชื่อ</label><input id="pName"></div><div><label>ติดต่อ</label><input id="pPhone"></div><div><label>หมายเหตุ</label><input id="pNote" style="width:260px"></div>
+<button class="btn" onclick="savePerson()">บันทึก</button><button class="btn g" onclick="clearPerson()">ล้าง</button></div></div>
+<div class="card tw" id="peopleTbl"></div></section>
+
+<section id="t-debtors" class="hide"><div class="card"><h3>เพิ่ม/แก้ไขสัญญา</h3><div class="row">
+<input type="hidden" id="dId"><div><label>ลูกหนี้</label><select id="dPid"></select></div><div><label>ชื่อสัญญา</label><input id="dName" placeholder="เช่น Cash 2023"></div>
+<div><label>ประเภท</label><select id="dKind"><option value="daily">เงินสด ดอกรายวัน</option><option value="card">ผ่อนบัตร (0%/ดอกคงที่)</option><option value="hist">ประวัติ (นำเข้า)</option></select></div>
+<div><label>วิธีจ่าย / บัตร</label><select id="dMid"></select></div>
+<div><label>จำนวนงวด (บัตร)</label><input id="dMonths" type="number" style="width:70px"></div>
+<div><label>สถานะ</label><select id="dStatus"><option value="active">ใช้งาน</option><option value="closed">ปิดแล้ว</option></select></div>
+<div><label>ดอกเบี้ย (%)</label><input id="dRate" type="number" step="0.01" style="width:90px"></div>
+<div><label>ต่อ</label><select id="dRateU"><option value="y">ปี</option><option value="m">เดือน</option></select></div>
+<div><label>ค่างวด/เดือน (0=ไม่กำหนด)</label><input id="dInst" type="number" step="0.01" style="width:130px"></div>
+<div><label>วันเริ่ม</label><input id="dStart" type="date"></div>
+<div><label>ยอดต้นยกมา</label><input id="dOpen" type="number" step="0.01" style="width:120px"></div>
+<div><label>ตัดรอบทุกวันที่</label><input id="dDay" type="number" min="1" max="31" style="width:70px"></div>
+<div><label>Remarks</label><input id="dNote" style="width:320px"></div>
+<button class="btn" onclick="saveDebtor()">บันทึก</button><button class="btn g" onclick="clearDebtor()">ล้าง</button></div>
+<p class="muted">ผ่อนบัตร: ใส่ยอดต้นยกมา = ยอดผ่อน, งวด, ดอก %/ปี (0 = ผ่อน 0%) · เงินสด: ตัดรอบทุกวันที่กำหนด · ดอก = ต้นยกมา × วัน × อัตรา/ปี ÷ 365 ทบเข้ายอด ณ วันตัดรอบ · รายการยืม/คืนระหว่างรอบ นับเข้างวดนั้น</p></div>
+<div class="card"><div class="addbar" style="justify-content:space-between"><span class="muted">คลิกหัวคอลัมน์ = เรียง · Shift+คลิก = เพิ่มเงื่อนไขถัดไป</span><button class="btn g s" onclick="resetSort('debtorTbl')">↺ เรียงค่าเริ่มต้น (สถานะ > เริ่ม ใหม่→เก่า)</button></div><div class="filt"><div><label>ลูกหนี้</label><select id="dfP" onchange="setDF('p',this.value)"></select></div><div><label>ประเภท</label><select id="dfK" onchange="setDF('k',this.value)"></select></div><div><label>วิธีจ่าย</label><select id="dfB" onchange="setDF('b',this.value)"></select></div><div><label>สถานะ</label><select id="dfS" onchange="setDF('s',this.value)"></select></div><button class="btn g s" onclick="DF={p:'',k:'',b:'',s:''};safeRender()">ล้าง filter</button></div><div class="tw" id="debtorTbl"></div></div></section>
+
+<section id="t-txns" class="hide"><div class="card"><h3>บันทึกรายการ</h3><div class="row">
+<input type="hidden" id="xId"><div><label>สัญญา</label><select id="xDid"></select></div><div><label>วันที่</label><input id="xDate" type="date"></div>
+<div><label>ประเภท</label><select id="xType"><option value="borrow">ยืม (จ่ายออก)</option><option value="repay">คืน (รับเข้า)</option></select></div>
+<div><label>จำนวนเงิน</label><input id="xAmt" type="number" step="0.01"></div>
+<div><label>วิธีจ่าย</label><select id="xMid"></select></div>
+<div><label>หมายเหตุ</label><input id="xNote"></div>
+<button class="btn" onclick="saveTxn()">บันทึก</button><button class="btn g" onclick="clearTxn()">ล้าง</button></div></div>
+<div class="card"><div class="filt"><div><label>ลูกหนี้</label><select id="fP" onchange="setTF('p',this.value)"></select></div><div><label>สัญญา</label><select id="fC" onchange="setTF('c',this.value)"></select></div></div><div class="tw" id="txnTbl"></div></div></section>
+
+<section id="t-period" class="hide"><div class="card"><h3>สรุปรายงวด (<span class="dn"></span>)</h3><div class="tw" id="perTbl"></div>
+<p class="muted">ยอดดิว = ค่างวด แยกเป็นดอกงวดนั้น + ต้น · สุทธิ = คืน − ยืมเพิ่ม · แถว 🔮 = คาดการณ์ด้วยค่างวดจนหมดหนี้</p></div>
+<div class="card"><canvas id="cPer" height="90"></canvas></div></section>
+
+<section id="t-pred" class="hide"><div class="card"><h3>คาดการณ์การปิดหนี้ (<span class="dn"></span>)</h3><div class="row">
+<div><label>จ่ายต่อเดือน</label><input id="pAmt" type="number" step="0.01"></div>
+<button class="btn" onclick="renderPred()">คำนวณ</button><span class="muted" id="pHint"></span></div>
+<div class="kpis" id="pK" style="margin-top:12px"></div><canvas id="cPred" height="90"></canvas><div class="tw" id="pTbl" style="margin-top:10px"></div></div></section>
+
+<section id="t-setup" class="hide"><div class="card"><h3>Master: ธนาคาร</h3><div class="row">
+<input type="hidden" id="bId"><div><label>ชื่อย่อ</label><input id="bName" placeholder="เช่น KBank"></div><div><label>ชื่อเต็ม</label><input id="bFull"></div><div><label>หมายเหตุ</label><input id="bNote"></div>
+<button class="btn" onclick="saveB()">บันทึก</button><button class="btn g" onclick="clearB()">ล้าง</button></div></div>
+<div class="card tw" id="bTblW"></div><div class="card"><h3>Master: วิธีจ่าย</h3><div class="row">
+<input type="hidden" id="mId"><div><label>ชื่อ</label><input id="mName" placeholder="เช่น KBank Passion"></div>
+<div><label>ประเภท</label><select id="mType"><option value="cash">เงินสด</option><option value="transfer">โอน</option><option value="card">บัตรเครดิต</option><option value="other">อื่น ๆ</option></select></div>
+<div><label>ธนาคาร</label><select id="mBid"></select></div><div><label>เลขท้าย</label><input id="mLast4" maxlength="4" style="width:70px"></div>
+<div><label>สถานะ</label><select id="mActive"><option value="1">ใช้งาน</option><option value="0">ปิดใช้</option></select></div>
+<div><label>หมายเหตุ</label><input id="mNote"></div>
+<button class="btn" onclick="saveM()">บันทึก</button><button class="btn g" onclick="clearM()">ล้าง</button></div>
+<p class="muted">ID รันอัตโนมัติ (m1, m2…) · รายการยืม/คืนลิงก์ด้วย ID · ลบไม่ได้ถ้ามีรายการใช้อยู่ ให้ตั้งเป็นปิดใช้แทน</p></div>
+<div class="card tw" id="mTblW"></div></section>
+
+<section id="t-data" class="hide"><div class="card"><h3>สำรอง/กู้คืนข้อมูล</h3><div class="row">
+<button class="btn" onclick="exportJ()">Export JSON</button><input type="file" id="imp" accept=".json" onchange="importJ(this)">
+<button class="btn r" onclick="if(confirm('ลบข้อมูลทั้งหมด?')){DB={debtors:[],txns:[]};save();render()}">ลบทั้งหมด</button></div>
+<p class="muted">ข้อมูลเก็บใน browser (localStorage) ของเครื่องนี้ ควร Export สำรองเป็นระยะ</p></div></section>
+</main>
+<script src="js/storage.js?v=20261102165212"></script>
+<script src="js/utils.js?v=20261102165212"></script>
+<script src="js/table-search.js?v=20261102165212"></script>
+<script src="js/table-sort.js?v=20261102165212"></script>
+<script src="js/engine.js?v=20261102165212"></script>
+<script src="js/charts.js?v=20261102165212"></script>
+<script src="js/ui-dashboard.js?v=20261102165212"></script>
+<script src="js/ui-people.js?v=20261102165212"></script>
+<script src="js/ui-debtors.js?v=20261102165212"></script>
+<script src="js/ui-txns.js?v=20261102165212"></script>
+<script src="js/ui-period.js?v=20261102165212"></script>
+<script src="js/ui-predict.js?v=20261102165212"></script>
+<script src="js/ui-setup.js?v=20261102165212"></script>
+<script src="js/ui-data.js?v=20261102165212"></script>
+<script src="js/modal.js?v=20261102165212"></script>
+<script src="js/app.js?v=20261102165212"></script>
+</body></html>

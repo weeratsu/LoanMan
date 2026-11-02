@@ -1,0 +1,1319 @@
+{
+ "debtors": [
+  {
+   "id": "c1",
+   "name": "WR 2020",
+   "kind": "daily",
+   "status": "closed",
+   "rate": 11.99,
+   "rateU": "y",
+   "inst": 12191.11,
+   "day": 3,
+   "start": "2020-10-15",
+   "openP": 200000,
+   "note": "ปิดแล้ว 2022-04 · ดอกตาม Excel 20,017.34 vs สูตร 11.99% = 18,673.59 (Excel สูงกว่า 1,343.75 — น่าจะเป็นดอกจริง/ค่าธรรมเนียมธนาคาร) · คงเหลือ -156.94 ตามสูตร",
+   "pid": "p1"
+  },
+  {
+   "id": "c2",
+   "name": "WR 2022",
+   "kind": "daily",
+   "status": "closed",
+   "rate": 23,
+   "rateU": "y",
+   "inst": 1313.37,
+   "day": 3,
+   "start": "2022-07-27",
+   "openP": 41000,
+   "note": "โปะปิด 2023-11-21 → ยกยอดเข้า Cash 2023 · ดอกตาม Excel 10,537.56 vs สูตร 23% = 10,155.39 (Excel สูงกว่า 382.17) · คงเหลือ -382.17 ตามสูตร",
+   "pid": "p1"
+  },
+  {
+   "id": "c4",
+   "name": "Dreamloan 2025",
+   "kind": "hist",
+   "status": "closed",
+   "rate": 14.86,
+   "rateU": "y",
+   "inst": 17396.67,
+   "day": 3,
+   "start": "2025-07-08",
+   "openP": 100000,
+   "note": "ต้น 100,000 · 6×17,396.67 · ดอกรวม 4,380.02 (ลดต้นลดดอก ~1.24%/ด.)",
+   "rows": [
+    {
+     "b": "2025-08-03",
+     "days": 26,
+     "oP": 100000,
+     "int": 1238.726985711574,
+     "paid": 17396.67,
+     "pI": 1238.726985711574,
+     "pP": 16157.943014288425,
+     "cP": 83842.05698571158,
+     "date": "2025-08-04"
+    },
+    {
+     "b": "2025-09-03",
+     "days": 31,
+     "oP": 83842.05698571158,
+     "int": 1038.574185257685,
+     "paid": 17396.67,
+     "pI": 1038.574185257685,
+     "pP": 16358.095814742313,
+     "cP": 67483.96117096927,
+     "date": "2025-09-08"
+    },
+    {
+     "b": "2025-10-03",
+     "days": 30,
+     "oP": 67483.96117096927,
+     "int": 835.9420380519166,
+     "paid": 17396.67,
+     "pI": 835.9420380519166,
+     "pP": 16560.727961948083,
+     "cP": 50923.233209021186,
+     "date": "2025-10-08"
+    },
+    {
+     "b": "2025-11-03",
+     "days": 31,
+     "oP": 50923.233209021186,
+     "int": 630.7998317569833,
+     "paid": 17396.67,
+     "pI": 630.7998317569833,
+     "pP": 16765.870168243015,
+     "cP": 34157.363040778175,
+     "date": "2025-11-10"
+    },
+    {
+     "b": "2025-12-03",
+     "days": 30,
+     "oP": 34157.363040778175,
+     "int": 423.1164735935907,
+     "paid": 17396.67,
+     "pI": 423.1164735935907,
+     "pP": 16973.55352640641,
+     "cP": 17183.809514371766,
+     "date": "2025-12-08"
+    },
+    {
+     "b": "2026-01-03",
+     "days": 31,
+     "oP": 17183.809514371766,
+     "int": 212.8604856282327,
+     "paid": 17396.67,
+     "pI": 212.8604856282327,
+     "pP": 17183.809514371766,
+     "cP": 0.0,
+     "date": "2026-01-05"
+    }
+   ],
+   "pid": "p1"
+  },
+  {
+   "id": "c3",
+   "name": "Cash 2023 (ปัจจุบัน)",
+   "rate": 10,
+   "rateU": "y",
+   "inst": 5000,
+   "day": 3,
+   "start": "2023-11-21",
+   "openP": 107939.29016547947,
+   "note": "ยกมาจาก Finished - KHT 2022",
+   "kind": "daily",
+   "status": "active",
+   "payDay": 1,
+   "pid": "p1"
+  }
+ ],
+ "txns": [
+  {
+   "id": "k000",
+   "did": "c3",
+   "date": "2023-12-04",
+   "type": "repay",
+   "amt": 5000,
+   "note": "paid back"
+  },
+  {
+   "id": "k001",
+   "did": "c3",
+   "date": "2023-12-06",
+   "type": "borrow",
+   "amt": 30000,
+   "note": "borrowed"
+  },
+  {
+   "id": "k002",
+   "did": "c3",
+   "date": "2024-01-12",
+   "type": "repay",
+   "amt": 20000,
+   "note": "paid back"
+  },
+  {
+   "id": "k003",
+   "did": "c3",
+   "date": "2024-02-14",
+   "type": "repay",
+   "amt": 10000,
+   "note": "paid back"
+  },
+  {
+   "id": "k004",
+   "did": "c3",
+   "date": "2024-02-14",
+   "type": "borrow",
+   "amt": 27644.51,
+   "note": "moved from splitwise"
+  },
+  {
+   "id": "k005",
+   "did": "c3",
+   "date": "2024-02-24",
+   "type": "repay",
+   "amt": 1240,
+   "note": "home4animals trip"
+  },
+  {
+   "id": "k006",
+   "did": "c3",
+   "date": "2024-02-25",
+   "type": "repay",
+   "amt": 225,
+   "note": "behind bars"
+  },
+  {
+   "id": "k007",
+   "did": "c3",
+   "date": "2024-02-25",
+   "type": "borrow",
+   "amt": 296,
+   "note": "b4 steak house"
+  },
+  {
+   "id": "k008",
+   "did": "c3",
+   "date": "2024-03-05",
+   "type": "repay",
+   "amt": 10000,
+   "note": "paid back"
+  },
+  {
+   "id": "k009",
+   "did": "c3",
+   "date": "2024-03-09",
+   "type": "borrow",
+   "amt": 250,
+   "note": "salad factory"
+  },
+  {
+   "id": "k010",
+   "did": "c3",
+   "date": "2024-03-09",
+   "type": "borrow",
+   "amt": 245,
+   "note": "starbucks"
+  },
+  {
+   "id": "k011",
+   "did": "c3",
+   "date": "2024-03-09",
+   "type": "repay",
+   "amt": 175,
+   "note": "mos burger"
+  },
+  {
+   "id": "k012",
+   "did": "c3",
+   "date": "2024-04-16",
+   "type": "repay",
+   "amt": 626.95,
+   "note": "tina arena love saves cd"
+  },
+  {
+   "id": "k013",
+   "did": "c3",
+   "date": "2024-04-27",
+   "type": "borrow",
+   "amt": 356.666667,
+   "note": "krua nai suan"
+  },
+  {
+   "id": "k014",
+   "did": "c3",
+   "date": "2024-05-04",
+   "type": "repay",
+   "amt": 178,
+   "note": "kfc"
+  },
+  {
+   "id": "k015",
+   "did": "c3",
+   "date": "2024-05-08",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k016",
+   "did": "c3",
+   "date": "2024-05-26",
+   "type": "borrow",
+   "amt": 166.45,
+   "note": "เตี๋ยวไข่"
+  },
+  {
+   "id": "k017",
+   "did": "c3",
+   "date": "2024-05-26",
+   "type": "borrow",
+   "amt": 113.333333,
+   "note": "x chapter"
+  },
+  {
+   "id": "k018",
+   "did": "c3",
+   "date": "2024-05-26",
+   "type": "borrow",
+   "amt": 190,
+   "note": "ยา ขหท"
+  },
+  {
+   "id": "k019",
+   "did": "c3",
+   "date": "2024-05-26",
+   "type": "repay",
+   "amt": 634.666667,
+   "note": "หมูทะหัวมุม"
+  },
+  {
+   "id": "k020",
+   "did": "c3",
+   "date": "2024-05-26",
+   "type": "borrow",
+   "amt": 109.666667,
+   "note": "กาแฟนอกบ้าน"
+  },
+  {
+   "id": "k021",
+   "did": "c3",
+   "date": "2024-06-06",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k022",
+   "did": "c3",
+   "date": "2024-07-06",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k023",
+   "did": "c3",
+   "date": "2024-07-07",
+   "type": "borrow",
+   "amt": 300,
+   "note": "โหงว"
+  },
+  {
+   "id": "k024",
+   "did": "c3",
+   "date": "2024-07-07",
+   "type": "repay",
+   "amt": 49,
+   "note": "ที่ตักทราย"
+  },
+  {
+   "id": "k025",
+   "did": "c3",
+   "date": "2024-07-12",
+   "type": "borrow",
+   "amt": 208,
+   "note": "jone's salad"
+  },
+  {
+   "id": "k026",
+   "did": "c3",
+   "date": "2024-07-12",
+   "type": "repay",
+   "amt": 1100,
+   "note": "health land"
+  },
+  {
+   "id": "k027",
+   "did": "c3",
+   "date": "2024-07-12",
+   "type": "borrow",
+   "amt": 276,
+   "note": "tee noi"
+  },
+  {
+   "id": "k028",
+   "did": "c3",
+   "date": "2024-07-26",
+   "type": "borrow",
+   "amt": 228,
+   "note": "kfc"
+  },
+  {
+   "id": "k029",
+   "did": "c3",
+   "date": "2024-07-26",
+   "type": "borrow",
+   "amt": 165,
+   "note": "starbucks"
+  },
+  {
+   "id": "k030",
+   "did": "c3",
+   "date": "2024-07-30",
+   "type": "repay",
+   "amt": 405,
+   "note": "behind bars"
+  },
+  {
+   "id": "k031",
+   "did": "c3",
+   "date": "2024-07-30",
+   "type": "repay",
+   "amt": 490,
+   "note": "ทรายแมว odour lock"
+  },
+  {
+   "id": "k032",
+   "did": "c3",
+   "date": "2024-08-06",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k033",
+   "did": "c3",
+   "date": "2024-08-25",
+   "type": "repay",
+   "amt": 109,
+   "note": "ไม้ตกแมว"
+  },
+  {
+   "id": "k034",
+   "did": "c3",
+   "date": "2024-09-04",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k035",
+   "did": "c3",
+   "date": "2024-09-06",
+   "type": "repay",
+   "amt": 180,
+   "note": "ฉันจะกินชาเย็นทุกวัน"
+  },
+  {
+   "id": "k036",
+   "did": "c3",
+   "date": "2024-09-29",
+   "type": "borrow",
+   "amt": 276,
+   "note": "tee noi"
+  },
+  {
+   "id": "k037",
+   "did": "c3",
+   "date": "2024-10-06",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k038",
+   "did": "c3",
+   "date": "2024-10-10",
+   "type": "borrow",
+   "amt": 3230,
+   "note": "wifi camera"
+  },
+  {
+   "id": "k039",
+   "did": "c3",
+   "date": "2024-10-13",
+   "type": "repay",
+   "amt": 320,
+   "note": "salad factory"
+  },
+  {
+   "id": "k040",
+   "did": "c3",
+   "date": "2024-10-13",
+   "type": "borrow",
+   "amt": 276,
+   "note": "เจริญรสชาบู"
+  },
+  {
+   "id": "k041",
+   "did": "c3",
+   "date": "2024-10-13",
+   "type": "repay",
+   "amt": 169,
+   "note": "swensen's"
+  },
+  {
+   "id": "k042",
+   "did": "c3",
+   "date": "2024-10-13",
+   "type": "borrow",
+   "amt": 226.25,
+   "note": "kht's makro"
+  },
+  {
+   "id": "k043",
+   "did": "c3",
+   "date": "2024-10-13",
+   "type": "repay",
+   "amt": 30,
+   "note": "makro parking"
+  },
+  {
+   "id": "k044",
+   "did": "c3",
+   "date": "2024-10-15",
+   "type": "repay",
+   "amt": 3230,
+   "note": "โอนค่ากล้อง"
+  },
+  {
+   "id": "k045",
+   "did": "c3",
+   "date": "2024-10-19",
+   "type": "repay",
+   "amt": 608.9,
+   "note": "momo"
+  },
+  {
+   "id": "k046",
+   "did": "c3",
+   "date": "2024-10-20",
+   "type": "repay",
+   "amt": 647.48,
+   "note": "โอ้กะจู๋"
+  },
+  {
+   "id": "k047",
+   "did": "c3",
+   "date": "2024-10-20",
+   "type": "borrow",
+   "amt": 650,
+   "note": "health land"
+  },
+  {
+   "id": "k048",
+   "did": "c3",
+   "date": "2024-10-20",
+   "type": "repay",
+   "amt": 324,
+   "note": "wow pet shop"
+  },
+  {
+   "id": "k049",
+   "did": "c3",
+   "date": "2024-10-20",
+   "type": "borrow",
+   "amt": 257,
+   "note": "7-11"
+  },
+  {
+   "id": "k050",
+   "did": "c3",
+   "date": "2024-10-26",
+   "type": "borrow",
+   "amt": 425,
+   "note": "ครกไม้"
+  },
+  {
+   "id": "k051",
+   "did": "c3",
+   "date": "2024-10-27",
+   "type": "repay",
+   "amt": 600,
+   "note": "วาโก"
+  },
+  {
+   "id": "k052",
+   "did": "c3",
+   "date": "2024-11-03",
+   "type": "repay",
+   "amt": 300,
+   "note": "ไก่ย่างพระรามห้า"
+  },
+  {
+   "id": "k053",
+   "did": "c3",
+   "date": "2024-11-03",
+   "type": "borrow",
+   "amt": 155,
+   "note": "อั่งตี๋"
+  },
+  {
+   "id": "k054",
+   "did": "c3",
+   "date": "2024-11-06",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k055",
+   "did": "c3",
+   "date": "2024-12-06",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k056",
+   "did": "c3",
+   "date": "2024-12-20",
+   "type": "borrow",
+   "amt": 460,
+   "note": "NAMNAM PASTA AND-C.WESTVINONTHABURI TH"
+  },
+  {
+   "id": "k057",
+   "did": "c3",
+   "date": "2024-12-25",
+   "type": "borrow",
+   "amt": 159,
+   "note": "kfc"
+  },
+  {
+   "id": "k058",
+   "did": "c3",
+   "date": "2025-01-04",
+   "type": "borrow",
+   "amt": 293,
+   "note": "black canyon"
+  },
+  {
+   "id": "k059",
+   "did": "c3",
+   "date": "2025-01-04",
+   "type": "repay",
+   "amt": 240,
+   "note": "behind bars"
+  },
+  {
+   "id": "k060",
+   "did": "c3",
+   "date": "2025-01-06",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k061",
+   "did": "c3",
+   "date": "2025-01-18",
+   "type": "borrow",
+   "amt": 343.5,
+   "note": "yaoi"
+  },
+  {
+   "id": "k062",
+   "did": "c3",
+   "date": "2025-01-18",
+   "type": "repay",
+   "amt": 324.5,
+   "note": "watsons (paid by kht)"
+  },
+  {
+   "id": "k063",
+   "did": "c3",
+   "date": "2025-01-18",
+   "type": "borrow",
+   "amt": 94.5,
+   "note": "dou"
+  },
+  {
+   "id": "k064",
+   "did": "c3",
+   "date": "2025-01-25",
+   "type": "borrow",
+   "amt": 190,
+   "note": "parking I am china & one"
+  },
+  {
+   "id": "k065",
+   "did": "c3",
+   "date": "2025-01-25",
+   "type": "repay",
+   "amt": 217.5,
+   "note": "behind bars"
+  },
+  {
+   "id": "k066",
+   "did": "c3",
+   "date": "2025-02-06",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k067",
+   "did": "c3",
+   "date": "2025-03-06",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k068",
+   "did": "c3",
+   "date": "2025-04-07",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k069",
+   "did": "c3",
+   "date": "2025-05-08",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k070",
+   "did": "c3",
+   "date": "2025-06-10",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k071",
+   "did": "c3",
+   "date": "2025-07-07",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k072",
+   "did": "c3",
+   "date": "2025-08-07",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k073",
+   "did": "c3",
+   "date": "2025-08-09",
+   "type": "repay",
+   "amt": 805.66,
+   "note": "ลัคกี้ & จินดา"
+  },
+  {
+   "id": "k074",
+   "did": "c3",
+   "date": "2025-08-14",
+   "type": "borrow",
+   "amt": 500,
+   "note": "ดาบพิฆาต"
+  },
+  {
+   "id": "k075",
+   "did": "c3",
+   "date": "2025-08-15",
+   "type": "repay",
+   "amt": 292,
+   "note": "hachiban"
+  },
+  {
+   "id": "k076",
+   "did": "c3",
+   "date": "2025-08-15",
+   "type": "borrow",
+   "amt": 92.5,
+   "note": "black canyon"
+  },
+  {
+   "id": "k077",
+   "did": "c3",
+   "date": "2025-08-15",
+   "type": "repay",
+   "amt": 365,
+   "note": "eat am are"
+  },
+  {
+   "id": "k078",
+   "did": "c3",
+   "date": "2025-08-15",
+   "type": "borrow",
+   "amt": 119,
+   "note": "swensens'"
+  },
+  {
+   "id": "k079",
+   "did": "c3",
+   "date": "2025-08-24",
+   "type": "borrow",
+   "amt": 2000,
+   "note": "lending"
+  },
+  {
+   "id": "k080",
+   "did": "c3",
+   "date": "2025-08-30",
+   "type": "borrow",
+   "amt": 913.78,
+   "note": "smoked & anya's place"
+  },
+  {
+   "id": "k081",
+   "did": "c3",
+   "date": "2025-09-07",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k082",
+   "did": "c3",
+   "date": "2025-09-14",
+   "type": "repay",
+   "amt": 2000,
+   "note": "paid back"
+  },
+  {
+   "id": "k083",
+   "did": "c3",
+   "date": "2025-09-19",
+   "type": "borrow",
+   "amt": 319,
+   "note": "sizzler"
+  },
+  {
+   "id": "k084",
+   "did": "c3",
+   "date": "2025-09-21",
+   "type": "repay",
+   "amt": 350,
+   "note": "yoon's kitchen korean bbq"
+  },
+  {
+   "id": "k085",
+   "did": "c3",
+   "date": "2025-09-27",
+   "type": "repay",
+   "amt": 283,
+   "note": "tee noi"
+  },
+  {
+   "id": "k086",
+   "did": "c3",
+   "date": "2025-09-27",
+   "type": "borrow",
+   "amt": 80,
+   "note": "gaga"
+  },
+  {
+   "id": "k087",
+   "did": "c3",
+   "date": "2025-09-27",
+   "type": "borrow",
+   "amt": 160,
+   "note": "สากกะเบือลาบแซบ"
+  },
+  {
+   "id": "k088",
+   "did": "c3",
+   "date": "2025-10-08",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k089",
+   "did": "c3",
+   "date": "2025-10-26",
+   "type": "borrow",
+   "amt": 492.5,
+   "note": "เคลียร์จาก settle up"
+  },
+  {
+   "id": "k090",
+   "did": "c3",
+   "date": "2025-11-08",
+   "type": "borrow",
+   "amt": 132.5,
+   "note": "after you"
+  },
+  {
+   "id": "k091",
+   "did": "c3",
+   "date": "2025-11-08",
+   "type": "repay",
+   "amt": 59,
+   "note": "tops"
+  },
+  {
+   "id": "k092",
+   "did": "c3",
+   "date": "2025-11-10",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k093",
+   "did": "c3",
+   "date": "2025-11-12",
+   "type": "repay",
+   "amt": 322.5,
+   "note": "swing bar"
+  },
+  {
+   "id": "k094",
+   "did": "c3",
+   "date": "2025-11-12",
+   "type": "repay",
+   "amt": 60,
+   "note": "grab from ราชดำเนิน paid by kht"
+  },
+  {
+   "id": "k095",
+   "did": "c3",
+   "date": "2025-12-10",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k096",
+   "did": "c3",
+   "date": "2026-01-09",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k097",
+   "did": "c3",
+   "date": "2026-01-12",
+   "type": "borrow",
+   "amt": 725.41,
+   "note": "ยอดยกมาจาก settle up"
+  },
+  {
+   "id": "k098",
+   "did": "c3",
+   "date": "2026-01-16",
+   "type": "borrow",
+   "amt": 2193.93,
+   "note": "cash expenses for samui trip"
+  },
+  {
+   "id": "k099",
+   "did": "c3",
+   "date": "2026-02-17",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k100",
+   "did": "c3",
+   "date": "2026-02-24",
+   "type": "borrow",
+   "amt": 585.5,
+   "note": "ยอดยกมาจาก settle up"
+  },
+  {
+   "id": "k101",
+   "did": "c3",
+   "date": "2026-03-14",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k102",
+   "did": "c3",
+   "date": "2026-04-21",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k103",
+   "did": "c3",
+   "date": "2026-05-16",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k104",
+   "did": "c3",
+   "date": "2026-06-20",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k105",
+   "did": "c3",
+   "date": "2026-07-16",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k106",
+   "did": "c3",
+   "date": "2026-07-25",
+   "type": "borrow",
+   "amt": 234.5,
+   "note": "ozawa ramen"
+  },
+  {
+   "id": "k107",
+   "did": "c3",
+   "date": "2026-08-21",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k108",
+   "did": "c3",
+   "date": "2026-09-24",
+   "type": "repay",
+   "amt": 3000,
+   "note": "paid back"
+  },
+  {
+   "id": "k109",
+   "did": "c3",
+   "date": "2026-09-30",
+   "type": "borrow",
+   "amt": 17000,
+   "note": "new lending trx"
+  },
+  {
+   "id": "k110",
+   "did": "c3",
+   "date": "2026-11-01",
+   "type": "borrow",
+   "amt": 5000,
+   "note": "new lending trx"
+  },
+  {
+   "id": "wr2020_000",
+   "did": "c1",
+   "date": "2020-11-04",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 1"
+  },
+  {
+   "id": "wr2020_001",
+   "did": "c1",
+   "date": "2020-12-04",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 2"
+  },
+  {
+   "id": "wr2020_002",
+   "did": "c1",
+   "date": "2021-01-11",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 3"
+  },
+  {
+   "id": "wr2020_003",
+   "did": "c1",
+   "date": "2021-02-04",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 4"
+  },
+  {
+   "id": "wr2020_004",
+   "did": "c1",
+   "date": "2021-03-07",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 5"
+  },
+  {
+   "id": "wr2020_005",
+   "did": "c1",
+   "date": "2021-04-05",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 6"
+  },
+  {
+   "id": "wr2020_006",
+   "did": "c1",
+   "date": "2021-05-04",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 7"
+  },
+  {
+   "id": "wr2020_007",
+   "did": "c1",
+   "date": "2021-06-04",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 8"
+  },
+  {
+   "id": "wr2020_008",
+   "did": "c1",
+   "date": "2021-07-05",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 9"
+  },
+  {
+   "id": "wr2020_009",
+   "did": "c1",
+   "date": "2021-08-06",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 10"
+  },
+  {
+   "id": "wr2020_010",
+   "did": "c1",
+   "date": "2021-09-06",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 11"
+  },
+  {
+   "id": "wr2020_011",
+   "did": "c1",
+   "date": "2021-10-04",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 12"
+  },
+  {
+   "id": "wr2020_012",
+   "did": "c1",
+   "date": "2021-11-04",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 13"
+  },
+  {
+   "id": "wr2020_013",
+   "did": "c1",
+   "date": "2021-12-06",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 14"
+  },
+  {
+   "id": "wr2020_014",
+   "did": "c1",
+   "date": "2022-01-04",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 15"
+  },
+  {
+   "id": "wr2020_015",
+   "did": "c1",
+   "date": "2022-02-04",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 16"
+  },
+  {
+   "id": "wr2020_016",
+   "did": "c1",
+   "date": "2022-03-07",
+   "type": "repay",
+   "amt": 12191.11,
+   "note": "งวด 17"
+  },
+  {
+   "id": "wr2020_017",
+   "did": "c1",
+   "date": "2022-04-04",
+   "type": "repay",
+   "amt": 11581.66,
+   "note": "งวด 18"
+  },
+  {
+   "id": "wr2022_000",
+   "did": "c2",
+   "date": "2022-08-04",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 1"
+  },
+  {
+   "id": "wr2022_001",
+   "did": "c2",
+   "date": "2022-09-05",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 2"
+  },
+  {
+   "id": "wr2022_002",
+   "did": "c2",
+   "date": "2022-10-04",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 3"
+  },
+  {
+   "id": "wr2022_003",
+   "did": "c2",
+   "date": "2022-11-23",
+   "type": "repay",
+   "amt": 2626.74,
+   "note": "งวด 4"
+  },
+  {
+   "id": "wr2022_004",
+   "did": "c2",
+   "date": "2022-12-23",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 5"
+  },
+  {
+   "id": "wr2022_005",
+   "did": "c2",
+   "date": "2023-01-23",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 6"
+  },
+  {
+   "id": "wr2022_006",
+   "did": "c2",
+   "date": "2023-02-23",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 7"
+  },
+  {
+   "id": "wr2022_007",
+   "did": "c2",
+   "date": "2023-03-23",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 8"
+  },
+  {
+   "id": "wr2022_008",
+   "did": "c2",
+   "date": "2023-04-23",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 9"
+  },
+  {
+   "id": "wr2022_009",
+   "did": "c2",
+   "date": "2023-05-05",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 10"
+  },
+  {
+   "id": "wr2022_010",
+   "did": "c2",
+   "date": "2023-06-06",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 11"
+  },
+  {
+   "id": "wr2022_011",
+   "did": "c2",
+   "date": "2023-07-04",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 12"
+  },
+  {
+   "id": "wr2022_012",
+   "did": "c2",
+   "date": "2023-08-04",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 13"
+  },
+  {
+   "id": "wr2022_013",
+   "did": "c2",
+   "date": "2023-09-04",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 14"
+  },
+  {
+   "id": "wr2022_014",
+   "did": "c2",
+   "date": "2023-10-04",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 15"
+  },
+  {
+   "id": "wr2022_015",
+   "did": "c2",
+   "date": "2023-11-04",
+   "type": "repay",
+   "amt": 1313.37,
+   "note": "งวด 16"
+  },
+  {
+   "id": "wr2022_016",
+   "did": "c2",
+   "date": "2023-11-21",
+   "type": "repay",
+   "amt": 29210.27,
+   "note": "งวด 17"
+  }
+ ],
+ "people": [
+  {
+   "id": "p1",
+   "name": "KHT",
+   "phone": "",
+   "note": ""
+  }
+ ],
+ "methods": [
+  {
+   "id": "m1",
+   "name": "เงินสด",
+   "type": "cash"
+  },
+  {
+   "id": "m2",
+   "name": "โอนเงิน",
+   "type": "transfer"
+  }
+ ]
+}
