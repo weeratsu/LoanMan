@@ -2,10 +2,10 @@
 <html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LoanMan - บันทึกยืม-คืนเงิน</title>
 <link rel="icon" type="image/svg+xml" href="assets/icon.svg"><link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest">
-<script>window.addEventListener('error',function(e){var b=document.getElementById('errbar');if(b&&e.message&&e.message!=='Script error.'){b.textContent='⚠ '+e.message;b.style.display='block';}});</script><script src="js/vendor/chart.umd.min.js?v=20261102202303"></script>
+<script>window.addEventListener('error',function(e){var b=document.getElementById('errbar');if(b&&e.message&&e.message!=='Script error.'){b.textContent='⚠ '+e.message;b.style.display='block';}});</script><script src="js/vendor/chart.umd.min.js?v=20261102213832"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=20261102202303"></head><body>
+<link rel="stylesheet" href="css/style.css?v=20261102213832"></head><body>
 <header><h1>💰 LoanMan</h1><nav id="nav">
 <button data-t="dash" class="on">ภาพรวม</button><button data-t="people">ลูกหนี้</button><button data-t="debtors">สัญญา</button><button data-t="txns">รายการยืม/คืน</button><button data-t="period">สรุปงวด</button><button data-t="pred">คาดการณ์</button><button data-t="setup">Setup</button><button data-t="data">ข้อมูล</button></nav>
 <span id="selWrap" style="margin-left:auto;color:#cfe0ff">สัญญา (สรุปงวด/คาดการณ์): <select id="selD"></select></span></header>
@@ -30,13 +30,14 @@
 <div><label>สถานะ</label><select id="dStatus"><option value="active">ใช้งาน</option><option value="closed">ปิดแล้ว</option></select></div>
 <div><label>ดอกเบี้ย (%)</label><input id="dRate" type="number" step="0.01" style="width:90px"></div>
 <div><label>ต่อ</label><select id="dRateU"><option value="y">ปี</option><option value="m">เดือน</option></select></div>
-<div><label>ค่างวด/เดือน (0=ไม่กำหนด)</label><input id="dInst" type="number" step="0.01" style="width:130px"></div>
+<div><label>ค่างวดเริ่มต้น/เดือน (0=ไม่กำหนด)</label><input id="dInst" type="number" step="0.01" style="width:130px"></div>
+<div style="flex-basis:100%"><label>ประวัติค่างวด (มีผลตั้งแต่ → ค่างวด) · เทียบกับวันตัดรอบของแต่ละงวด</label><div id="dInstH"></div><a href="#" class="btn g s" onclick="ihAdd();return false">+ เพิ่มการเปลี่ยนค่างวด</a></div>
 <div><label>วันเริ่ม</label><input id="dStart" type="date"></div>
 <div><label>ยอดต้นยกมา</label><input id="dOpen" type="number" step="0.01" style="width:120px"></div>
 <div><label>ตัดรอบทุกวันที่</label><input id="dDay" type="number" min="1" max="31" style="width:70px"></div>
 <div><label>Remarks</label><input id="dNote" style="width:320px"></div>
 <button class="btn" onclick="saveDebtor()">บันทึก</button><button class="btn g" onclick="clearDebtor()">ล้าง</button></div>
-<p class="muted">ผ่อนบัตร: ใส่ยอดต้นยกมา = ยอดผ่อน, งวด, ดอก %/ปี (0 = ผ่อน 0%) · เงินสด: ตัดรอบทุกวันที่กำหนด · ดอก = ต้นยกมา × วัน × อัตรา/ปี ÷ 365 ทบเข้ายอด ณ วันตัดรอบ · รายการยืม/คืนระหว่างรอบ นับเข้างวดนั้น</p></div>
+<p class="muted">ผ่อนบัตร: ใส่ยอดต้นยกมา = ยอดผ่อน, งวด, ดอก %/ปี (0 = ผ่อน 0%) · เงินสด: ตัดรอบทุกวันที่กำหนด · ดอก = ต้นยกมา × อัตรา/ปี ÷ 365 × วันจากตัดรอบก่อน ทบเข้ายอด ณ วันตัดรอบ · รายการถึงวันตัดรอบ (รวมวันนั้น) นับเข้างวดนั้น</p></div>
 <div class="card"><div class="addbar" style="justify-content:space-between"><span class="muted">คลิกหัวคอลัมน์ = เรียง · Shift+คลิก = เพิ่มเงื่อนไขถัดไป</span><button class="btn g s" onclick="resetSort('debtorTbl')">↺ เรียงค่าเริ่มต้น (สถานะ > เริ่ม ใหม่→เก่า)</button></div><div class="filt"><div><label>ลูกหนี้</label><select id="dfP" onchange="setDF('p',this.value)"></select></div><div><label>ประเภท</label><select id="dfK" onchange="setDF('k',this.value)"></select></div><div><label>วิธีจ่าย</label><select id="dfB" onchange="setDF('b',this.value)"></select></div><div><label>สถานะ</label><select id="dfS" onchange="setDF('s',this.value)"></select></div><button class="btn g s" onclick="DF={p:'',k:'',b:'',s:''};safeRender()">ล้าง filter</button></div><div class="tw" id="debtorTbl"></div></div></section>
 
 <section id="t-txns" class="hide"><div class="card"><h3>บันทึกรายการ</h3><div class="row">
@@ -75,21 +76,21 @@
 <button class="btn r" onclick="if(confirm('ลบข้อมูลทั้งหมด?')){DB={debtors:[],txns:[]};save();render()}">ลบทั้งหมด</button></div>
 <p class="muted">ข้อมูลเก็บใน browser (localStorage) ของเครื่องนี้ ควร Export สำรองเป็นระยะ</p></div></section>
 </main>
-<script src="js/storage.js?v=20261102202303"></script>
-<script src="js/utils.js?v=20261102202303"></script>
-<script src="js/table-search.js?v=20261102202303"></script>
-<script src="js/table-sort.js?v=20261102202303"></script>
-<script src="js/engine.js?v=20261102202303"></script>
-<script src="js/charts.js?v=20261102202303"></script>
-<script src="js/ui-dashboard.js?v=20261102202303"></script>
-<script src="js/ui-people.js?v=20261102202303"></script>
-<script src="js/ui-debtors.js?v=20261102202303"></script>
-<script src="js/ui-txns.js?v=20261102202303"></script>
-<script src="js/ui-period.js?v=20261102202303"></script>
-<script src="js/ui-predict.js?v=20261102202303"></script>
-<script src="js/ui-setup.js?v=20261102202303"></script>
-<script src="js/pin-crypto.js?v=20261102202303"></script>
-<script src="js/ui-data.js?v=20261102202303"></script>
-<script src="js/modal.js?v=20261102202303"></script>
-<script src="js/app.js?v=20261102202303"></script>
+<script src="js/storage.js?v=20261102213832"></script>
+<script src="js/utils.js?v=20261102213832"></script>
+<script src="js/table-search.js?v=20261102213832"></script>
+<script src="js/table-sort.js?v=20261102213832"></script>
+<script src="js/engine.js?v=20261102213832"></script>
+<script src="js/charts.js?v=20261102213832"></script>
+<script src="js/ui-dashboard.js?v=20261102213832"></script>
+<script src="js/ui-people.js?v=20261102213832"></script>
+<script src="js/ui-debtors.js?v=20261102213832"></script>
+<script src="js/ui-txns.js?v=20261102213832"></script>
+<script src="js/ui-period.js?v=20261102213832"></script>
+<script src="js/ui-predict.js?v=20261102213832"></script>
+<script src="js/ui-setup.js?v=20261102213832"></script>
+<script src="js/pin-crypto.js?v=20261102213832"></script>
+<script src="js/ui-data.js?v=20261102213832"></script>
+<script src="js/modal.js?v=20261102213832"></script>
+<script src="js/app.js?v=20261102213832"></script>
 </body></html>

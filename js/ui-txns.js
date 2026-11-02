@@ -1,5 +1,5 @@
-/* งวด = วันตัดรอบล่าสุดที่ <= วันที่ทำรายการ (ตามวันตัดรอบของสัญญา) */
-function perOf(dt,day){var x=D(dt),b=bdate(x.getFullYear(),x.getMonth(),day);if(iso(b)>dt)b=bdate(x.getFullYear(),x.getMonth()-1,day);return iso(b);}
+/* งวด = วันตัดรอบแรกที่ >= วันที่ทำรายการ (ตามวันตัดรอบของสัญญา) */
+function perOf(dt,day){var x=D(dt),b=bdate(x.getFullYear(),x.getMonth(),day);if(iso(b)<dt)b=bdate(x.getFullYear(),x.getMonth()+1,day);return iso(b);}
 var TF={p:'',c:''};
 function renderTxns(){
   $('fP').innerHTML=opts(DB.people.map(function(p){return [p.id,p.name]}),TF.p,'ทุกลูกหนี้');
