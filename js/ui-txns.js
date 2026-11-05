@@ -5,7 +5,7 @@ function renderTxns(){
   $('fP').innerHTML=opts(DB.people.map(function(p){return [p.id,p.name]}),TF.p,'ทุกลูกหนี้');
   var cs=DB.debtors.filter(function(d){return !TF.p||d.pid===TF.p});if(TF.c&&!cs.some(function(d){return d.id===TF.c}))TF.c='';
   $('fC').innerHTML=opts(cs.map(function(d){return [d.id,TF.p?d.name:cLabel(d)]}),TF.c,'ทุกสัญญา');
-  $('xMid').innerHTML=mOpts($('xMid').value);var xv=$('xDid').value||TF.c||cur;$('xDid').innerHTML=opts(DB.debtors.filter(function(d){return d.kind!=='hist'}).map(function(d){return [d.id,cLabel(d)]}),xv);
+  $('xMid').innerHTML=mOpts($('xMid').value);var xv=$('xDid').value||TF.c||cur;$('xDid').innerHTML=DB.debtors.filter(function(d){return d.kind!=='hist'}).map(function(d){return {d:d,cl:isClosed(d,calc(d,0,0))}}).sort(function(a,b){return (a.cl-b.cl)||(b.d.start||'').localeCompare(a.d.start||'')}).map(function(o){return '<option value="'+o.d.id+'"'+(o.d.id===xv?' selected':'')+(o.cl?' style="color:#999"':'')+'>'+cLabel(o.d)+(o.cl?' (ปิดแล้ว)':'')+'</option>'}).join('');
   var scope=TF.c?cs.filter(function(d){return d.id===TF.c}):cs,C={},h='',inn=0,out=0,bal=0;
   scope.forEach(function(d){C[d.id]=calc(d,0,0);bal+=C[d.id].P;});
   var tx=DB.txns.filter(function(t){return C[t.did]}).sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:(b.ts||0)-(a.ts||0)});
