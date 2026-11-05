@@ -8,7 +8,7 @@ function renderTxns(){
   $('xMid').innerHTML=mOpts($('xMid').value);var xv=$('xDid').value||TF.c||cur;$('xDid').innerHTML=opts(DB.debtors.filter(function(d){return d.kind!=='hist'}).map(function(d){return [d.id,cLabel(d)]}),xv);
   var scope=TF.c?cs.filter(function(d){return d.id===TF.c}):cs,C={},h='',inn=0,out=0,bal=0;
   scope.forEach(function(d){C[d.id]=calc(d,0,0);bal+=C[d.id].P;});
-  var tx=DB.txns.filter(function(t){return C[t.did]}).sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0});
+  var tx=DB.txns.filter(function(t){return C[t.did]}).sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:(b.ts||0)-(a.ts||0)});
   tx.forEach(function(t){var d=getD(t.did),pb=perOf(t.date,+d.day||1);
     if(t.type==='repay')inn+=t.amt;else out+=t.amt;
     h+='<tr><td class="l">'+t.date+'</td><td class="l">'+pName(d)+'</td><td class="l">'+d.name+'</td><td class="l"><span class="tag '+(t.type==='borrow'?'tb">ยืม':'tr">คืน')+'</span></td><td class="neg">'+(t.type==='repay'?f(t.amt):'')+'</td><td class="pos">'+(t.type==='borrow'?f(t.amt):'')+'</td><td class="l">'+mName(t.mid)+'</td><td class="l">'+pb+'</td><td class="l">'+(t.note||'')+'</td><td><button class="btn s" onclick="editTxn(\''+t.id+'\')">แก้</button> <button class="btn s r" onclick="delTxn(\''+t.id+'\')">ลบ</button></td></tr>';});
@@ -16,7 +16,7 @@ function renderTxns(){
   '<tr class="tot"><td class="l">รวม</td><td></td><td></td><td></td><td>'+f(inn)+'</td><td>'+f(out)+'</td><td></td><td></td><td></td><td></td></tr></table>';}
 function setTF(k,v){TF[k]=v;if(k==='p')TF.c='';if(k==='c'&&v)$('xDid').value=v;safeRender();}
 function saveTxn(){var did=$('xDid').value,a=+$('xAmt').value,dt=$('xDate').value;if(!did)return alert('เลือกสัญญา');if(!a||!dt)return alert('ใส่วันที่และจำนวน');
-  var id=$('xId').value||uid(),t=DB.txns.find(function(x){return x.id===id}),o={id:id,did:did,date:dt,type:$('xType').value,amt:Math.abs(a),mid:$('xMid').value,note:$('xNote').value};
+  var id=$('xId').value||uid(),t=DB.txns.find(function(x){return x.id===id}),o={id:id,did:did,date:dt,type:$('xType').value,amt:Math.abs(a),ts:(t&&t.ts)||Date.now(),mid:$('xMid').value,note:$('xNote').value};
   if(t)Object.assign(t,o);else DB.txns.push(o);save();clearTxn();safeRender();}
 function editTxn(id){var t=DB.txns.find(function(x){return x.id===id});$('xId').value=t.id;$('xDid').value=t.did;$('xDate').value=t.date;$('xType').value=t.type;$('xAmt').value=t.amt;$('xMid').value=t.mid||'';$('xNote').value=t.note||'';window.scrollTo(0,0);}
 function clearTxn(){$('xId').value='';$('xAmt').value='';$('xNote').value='';$('xDate').value=today();}
