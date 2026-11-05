@@ -3,7 +3,10 @@
    - เปิดหน้า -> แสดง localStorage ทันที แล้ว pull Sheet; ถ้า Sheet ใหม่กว่า และไม่มี edit ค้าง -> ใช้ของ Sheet
    - ไม่มี config / endpoint ว่าง = ไม่ทำอะไร · Setup มีปุ่มหยุด sync / push ตอนนี้ */
 (function(){
-  var cfg=window.LM_SHEET_CFG; if(!cfg||!/^https:/.test(cfg.endpoint||'')){window.LM_SYNC_ON=false;return;}
+  var cfg=window.LM_SHEET_CFG; if(!cfg||!/^https:/.test(cfg.endpoint||'')){try{cfg=JSON.parse(LS.getItem('lm_sheet_cfg')||'null');}catch(e){cfg=null;}if(cfg)window.LM_SHEET_CFG=cfg;}
+  if(!cfg||!/^https:/.test(cfg.endpoint||'')){window.LM_SYNC_ON=false;
+    if(/^https?:$/.test(location.protocol)){var _p=function(){var a=document.createElement('a');a.href='login.html';a.textContent='🔐 Login sync';a.style.cssText='position:fixed;left:12px;bottom:12px;z-index:9999;background:#2a64b8;color:#fff;padding:8px 14px;border-radius:20px;font-size:13px;text-decoration:none;box-shadow:0 2px 8px #0003';document.body.appendChild(a);};if(document.body)_p();else window.addEventListener('DOMContentLoaded',_p);}
+    return;}
   window.LM_SYNC_ON=true;
   var DIRTY='loanman_dirty',MOD='loanman_mod',timer=null,busy=false,again=false;
   function paused(){return LS.getItem('loanman_sync_off')==='1';}
@@ -27,6 +30,8 @@
   var _save=window.save;
   window.save=function(){LS.setItem(MOD,String(Date.now()));LS.setItem(DIRTY,'1');_save();if(paused()){badge('⏸ sync หยุดอยู่ (local)');return;}clearTimeout(timer);timer=setTimeout(push,1500);};
   window.lmSyncPush=function(){push(true);};
+  window.lmConnCode=function(){return btoa(unescape(encodeURIComponent(JSON.stringify({endpoint:cfg.endpoint,writeToken:cfg.writeToken,readToken:cfg.readToken}))));};
+  window.lmLogout=function(){LS.removeItem('lm_sheet_cfg');location.reload();};
   window.lmSyncSet=function(off){if(off)LS.setItem('loanman_sync_off','1');else{LS.removeItem('loanman_sync_off');push(true);}badge(off?'⏸ sync หยุดอยู่ (local)':'▶ sync');};
   async function pull(){if(paused()){badge('⏸ sync หยุดอยู่ (local)');return;}badge('↓ checking Sheet…');
     try{var res=await fetchJson(cfg.endpoint+'?token='+encodeURIComponent(cfg.readToken)+'&t='+Date.now());
