@@ -5,4 +5,4 @@ function go(t){tab=t;document.querySelectorAll('#nav button').forEach(function(x
 function safeRender(){try{render();reSort();tsInit();}catch(e){console.error(e);var b=document.getElementById('errbar');if(b){b.textContent='⚠ '+e.message;b.style.display='block';}}}
 document.getElementById('nav').addEventListener('click',function(ev){var b=ev.target.closest('button[data-t]');if(b)go(b.dataset.t);});
 $('selD').onchange=function(){cur=this.value;safeRender();};
-migrate();save();try{clearTxn();}catch(e){}go(tab);
+migrate();save();try{var so=$('syncOff');if(so)so.checked=LS.getItem('loanman_sync_off')==='1';if(!window.LM_SYNC_ON&&so)so.closest('.card').querySelector('.muted').textContent='ยังไม่ได้ตั้งค่า (js/config-sheet.js endpoint ว่าง) — ใช้ localStorage อย่างเดียว';}catch(e){}try{clearTxn();}catch(e){}go(tab);

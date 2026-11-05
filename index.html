@@ -2,12 +2,12 @@
 <html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LoanMan - บันทึกยืม-คืนเงิน</title>
 <link rel="icon" type="image/svg+xml" href="assets/icon.svg"><link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest">
-<script>window.addEventListener('error',function(e){var b=document.getElementById('errbar');if(b&&e.message&&e.message!=='Script error.'){b.textContent='⚠ '+e.message;b.style.display='block';}});</script><script src="js/vendor/chart.umd.min.js?v=20261102213832"></script>
+<script>window.addEventListener('error',function(e){var b=document.getElementById('errbar');if(b&&e.message&&e.message!=='Script error.'){b.textContent='⚠ '+e.message;b.style.display='block';}});</script><script src="js/vendor/chart.umd.min.js?v=20261105123043"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=20261102213832"></head><body>
+<link rel="stylesheet" href="css/style.css?v=20261105123043"></head><body>
 <header><h1>💰 LoanMan</h1><nav id="nav">
-<button data-t="dash" class="on">ภาพรวม</button><button data-t="people">ลูกหนี้</button><button data-t="debtors">สัญญา</button><button data-t="txns">รายการยืม/คืน</button><button data-t="period">สรุปงวด</button><button data-t="pred">คาดการณ์</button><button data-t="setup">Setup</button><button data-t="data">ข้อมูล</button></nav>
+<button data-t="dash" class="on">ภาพรวม</button><button data-t="txns">รายการยืม/คืน</button><button data-t="period">สรุปงวด</button><button data-t="pred">คาดการณ์</button><span class="navsep"></span><button data-t="people">ลูกหนี้</button><button data-t="debtors">สัญญา</button><button data-t="setup">⚙ Setup</button></nav>
 <span id="selWrap" style="margin-left:auto;color:#cfe0ff">สัญญา (สรุปงวด/คาดการณ์): <select id="selD"></select></span></header>
 <main>
 <section id="t-dash"><div class="kpis" id="kpis"></div>
@@ -58,7 +58,11 @@
 <button class="btn" onclick="renderPred()">คำนวณ</button><span class="muted" id="pHint"></span></div>
 <div class="kpis" id="pK" style="margin-top:12px"></div><canvas id="cPred" height="90"></canvas><div class="tw" id="pTbl" style="margin-top:10px"></div></div></section>
 
-<section id="t-setup" class="hide"><div class="card"><h3>Master: ธนาคาร</h3><div class="row">
+<section id="t-setup" class="hide"><div class="card"><h3>Google Sheet Sync</h3><div class="row"><label style="display:flex;gap:6px;align-items:center;font-size:14px;color:#222"><input type="checkbox" id="syncOff" onchange="lmSyncSet(this.checked)"> หยุด sync ชั่วคราว (local only)</label><button class="btn" onclick="lmSyncPush()">☁ Push ขึ้น Sheet ตอนนี้</button></div><p class="muted">บันทึกลงเครื่องก่อน แล้ว sync ขึ้น Sheet อัตโนมัติ · ข้อมูลลูกหนี้ (เข้ารหัส PIN) อัปเดตให้ LoanManPublic ทุกครั้งที่ sync</p></div>
+<div class="card"><h3>💾 สำรอง/กู้คืนข้อมูล</h3><div class="row">
+<button class="btn" onclick="exportJ()">Export JSON</button><button class="btn" onclick="exportPublic()">🔒 Export Public (data.js)</button><input type="file" id="imp" accept=".json" onchange="importJ(this)">
+</div>
+<p class="muted">Export JSON = สำรองทั้งหมด · Import = กู้คืน/เพิ่มสัญญา · Export Public = data.js สำรอง (กรณี Sheet ใช้ไม่ได้)</p></div><div class="card"><h3>Master: ธนาคาร</h3><div class="row">
 <input type="hidden" id="bId"><div><label>ชื่อย่อ</label><input id="bName" placeholder="เช่น KBank"></div><div><label>ชื่อเต็ม</label><input id="bFull"></div><div><label>หมายเหตุ</label><input id="bNote"></div>
 <button class="btn" onclick="saveB()">บันทึก</button><button class="btn g" onclick="clearB()">ล้าง</button></div></div>
 <div class="card tw" id="bTblW"></div><div class="card"><h3>Master: วิธีจ่าย</h3><div class="row">
@@ -69,28 +73,27 @@
 <div><label>หมายเหตุ</label><input id="mNote"></div>
 <button class="btn" onclick="saveM()">บันทึก</button><button class="btn g" onclick="clearM()">ล้าง</button></div>
 <p class="muted">ID รันอัตโนมัติ (m1, m2…) · รายการยืม/คืนลิงก์ด้วย ID · ลบไม่ได้ถ้ามีรายการใช้อยู่ ให้ตั้งเป็นปิดใช้แทน</p></div>
-<div class="card tw" id="mTblW"></div></section>
+<div class="card tw" id="mTblW"></div><div class="card" style="border:1px solid #f3c1bb"><h3 style="color:#c0392b">⚠ ลบข้อมูลทั้งหมด</h3><p class="muted">ลบเฉพาะในเครื่องนี้ · ระบบไม่ push ข้อมูลว่างขึ้น Sheet</p><button class="btn r" onclick="wipeAll()">ลบทั้งหมด</button></div></section>
 
-<section id="t-data" class="hide"><div class="card"><h3>สำรอง/กู้คืนข้อมูล</h3><div class="row">
-<button class="btn" onclick="exportJ()">Export JSON</button><button class="btn" onclick="exportPublic()">🔒 Export Public (data.js)</button><input type="file" id="imp" accept=".json" onchange="importJ(this)">
-<button class="btn r" onclick="if(confirm('ลบข้อมูลทั้งหมด?')){DB={debtors:[],txns:[]};save();render()}">ลบทั้งหมด</button></div>
-<p class="muted">ข้อมูลเก็บใน browser (localStorage) ของเครื่องนี้ ควร Export สำรองเป็นระยะ</p></div></section>
+
 </main>
-<script src="js/storage.js?v=20261102213832"></script>
-<script src="js/utils.js?v=20261102213832"></script>
-<script src="js/table-search.js?v=20261102213832"></script>
-<script src="js/table-sort.js?v=20261102213832"></script>
-<script src="js/engine.js?v=20261102213832"></script>
-<script src="js/charts.js?v=20261102213832"></script>
-<script src="js/ui-dashboard.js?v=20261102213832"></script>
-<script src="js/ui-people.js?v=20261102213832"></script>
-<script src="js/ui-debtors.js?v=20261102213832"></script>
-<script src="js/ui-txns.js?v=20261102213832"></script>
-<script src="js/ui-period.js?v=20261102213832"></script>
-<script src="js/ui-predict.js?v=20261102213832"></script>
-<script src="js/ui-setup.js?v=20261102213832"></script>
-<script src="js/pin-crypto.js?v=20261102213832"></script>
-<script src="js/ui-data.js?v=20261102213832"></script>
-<script src="js/modal.js?v=20261102213832"></script>
-<script src="js/app.js?v=20261102213832"></script>
+<script src="js/storage.js?v=20261105123043"></script>
+<script src="js/utils.js?v=20261105123043"></script>
+<script src="js/table-search.js?v=20261105123043"></script>
+<script src="js/table-sort.js?v=20261105123043"></script>
+<script src="js/engine.js?v=20261105123043"></script>
+<script src="js/charts.js?v=20261105123043"></script>
+<script src="js/ui-dashboard.js?v=20261105123043"></script>
+<script src="js/ui-people.js?v=20261105123043"></script>
+<script src="js/ui-debtors.js?v=20261105123043"></script>
+<script src="js/ui-txns.js?v=20261105123043"></script>
+<script src="js/ui-period.js?v=20261105123043"></script>
+<script src="js/ui-predict.js?v=20261105123043"></script>
+<script src="js/ui-setup.js?v=20261105123043"></script>
+<script src="js/pin-crypto.js?v=20261105123043"></script>
+<script src="js/ui-data.js?v=20261105123043"></script>
+<script src="js/modal.js?v=20261105123043"></script>
+<script src="js/config-sheet.js"></script>
+<script src="js/sheet-sync.js?v=20261105123043"></script>
+<script src="js/app.js?v=20261105123043"></script>
 </body></html>

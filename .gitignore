@@ -1,0 +1,5 @@
+# Private: Google Sheet tokens + Sheet ID - NEVER push
+js/config-sheet.js
+scripts/Code.gs
+# Private: raw data backups
+data/

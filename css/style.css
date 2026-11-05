@@ -29,3 +29,4 @@ table tr.closed td,table tr.closed td a{opacity:.65;color:#666}table tr.closed:h
 #debtorTbl tr>:first-child{display:none}
 th{position:sticky;top:0;z-index:3;background:#f0f3f8;box-shadow:0 1px 0 #dde3ec}th:hover{background:#e3e9f3}
 tr.clk{cursor:pointer}tr.clk:hover td{background:#e3ecfa!important}
+.navsep{display:inline-block;width:1px;height:22px;background:#ffffff44;margin:0 8px;vertical-align:middle}

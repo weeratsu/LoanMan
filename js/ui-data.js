@@ -12,3 +12,5 @@ async function exportPublic(){var ps=DB.people.filter(function(p){return p.pin})
   items.sort(function(){return Math.random()-.5});
   var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['window.LMP_DATA='+JSON.stringify({v:1,items:items})+';\n'],{type:'text/javascript'}));a.download='data.js';a.click();
   alert('Export '+ps.length+' คน → data.js\nวางไฟล์ไว้ที่ LoanManPublic/data.js แล้ว push'+(weak.length?'\n⚠ PIN สั้นกว่า 6 ตัว: '+weak.join(', '):''));}
+
+function wipeAll(){var s=prompt('พิมพ์ DELETE เพื่อยืนยันลบข้อมูลทั้งหมดในเครื่องนี้');if(s!=='DELETE')return;DB={people:[],debtors:[],txns:[]};migrate();LS.setItem('loanman',JSON.stringify(DB));safeRender();alert('ลบแล้ว (Sheet ไม่ถูกแก้)');}
