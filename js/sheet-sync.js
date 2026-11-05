@@ -27,7 +27,7 @@
   function sig(d){return JSON.stringify(TBL.map(function(t){return (d[t]||[]).map(function(r){return r.id+'@'+(r.u||0)}).sort()}))+(d.deleted||[]).length;}
   function adopt(m){var before=sig(DB);TBL.concat(['deleted']).forEach(function(t){DB[t]=m[t];});_save();SN=snap();
     if(sig(DB)!==before){if(typeof migrate==='function')migrate();if(typeof safeRender==='function')safeRender();return true;}return false;}
-  async function getSheet(){var r=await fetchJson(cfg.endpoint+'?token=[REDACTED_PARAM]&t='+Date.now());if(!r||!r.ok)throw new Error(r&&r.error||'pull failed');return r.data||{};}
+  async function getSheet(){var r=await fetchJson(cfg.endpoint+'?token='+encodeURIComponent(cfg.readToken)+'&t='+Date.now());if(!r||!r.ok)throw new Error(r&&r.error||'pull failed');return r.data||{};}
   async function pubItems(){if(typeof lmEnc!=='function'||typeof pubPayload!=='function'||!window.crypto||!crypto.subtle)return null;var out=[],ps=(DB.people||[]).filter(function(p){return p.pin});for(var i=0;i<ps.length;i++)out.push(await lmEnc(ps[i].pin,pubPayload(ps[i])));return out.sort(function(){return Math.random()-.5});}
   async function push(force){
     if(paused()&&!force)return;if(busy){again=true;return;}busy=true;badge('↑ syncing…');
