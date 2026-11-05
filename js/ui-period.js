@@ -10,4 +10,4 @@ function perChart(id,c){var L=c.per.map(function(p){return p.b});
    {type:'bar',label:'ยืมเพิ่ม',data:c.per.map(function(p){return -p.borrow}),backgroundColor:'#c0392b99',stack:'a'}]},options:{scales:{x:{stacked:true},y:{stacked:true}}}});}
 function renderPeriod(){var d=getD(cur);if(!d){$('perTbl').innerHTML='';return;}var c=calc(d);
   $('perTbl').innerHTML=perRows(c,d);perChart('cPer',c);
-  var t=$('perTbl'),r=t.querySelector('tr.fc');if(r)t.scrollTop=Math.max(r.offsetTop-200,0);}
+  setTimeout(function(){scrollLatest('perTbl')},0);}

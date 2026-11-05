@@ -10,7 +10,7 @@
   window.LM_SYNC_ON=true;
   var DIRTY='loanman_dirty',MOD='loanman_mod',timer=null,busy=false,again=false;
   function paused(){return LS.getItem('loanman_sync_off')==='1';}
-  function badge(t,c){var b=document.getElementById('syncBadge');if(!b){b=document.createElement('span');b.id='syncBadge';b.style.cssText='font-size:12px;margin-left:10px;opacity:.9';var h=document.querySelector('header');if(h)h.appendChild(b);}b.textContent=t;b.style.color=c||'#cfe0ff';}
+  function badge(t,c){var b=document.getElementById('syncBadge');if(!b){b=document.createElement('div');b.id='syncBadge';b.style.cssText='position:fixed;right:12px;bottom:12px;z-index:9999;background:#1f3b63;padding:6px 12px;border-radius:16px;font-size:12px;box-shadow:0 2px 8px #0003;transition:opacity .4s';(document.body||document.documentElement).appendChild(b);}clearTimeout(b._h);b.style.opacity='1';b.textContent=t;b.style.color=c||'#cfe0ff';if(/^☁/.test(t))b._h=setTimeout(function(){b.style.opacity='.55'},4000);}
   function sleep(ms){return new Promise(function(r){setTimeout(r,ms)});}
   async function fetchJson(url,opt){var w=[0,2500,6000],last;for(var i=0;i<w.length;i++){if(w[i]){badge('⏳ กำลังปลุก Google…');await sleep(w[i]);}
     try{var r=await fetch(url,opt),t=await r.text();return JSON.parse(t);}catch(e){last=e;}}throw last||new Error('fetch failed');}
@@ -28,7 +28,7 @@
     }catch(e){badge('⚠ offline: '+String(e.message||e).slice(0,50),'#ffb4a8');console.warn('LoanMan push',e);}
     busy=false;if(again){again=false;push();}}
   var _save=window.save;
-  window.save=function(){LS.setItem(MOD,String(Date.now()));LS.setItem(DIRTY,'1');_save();if(paused()){badge('⏸ sync หยุดอยู่ (local)');return;}clearTimeout(timer);timer=setTimeout(push,1500);};
+  window.save=function(){LS.setItem(MOD,String(Date.now()));LS.setItem(DIRTY,'1');_save();if(paused()){badge('⏸ sync หยุดอยู่ (local)');return;}badge('✎ รอ sync…','#ffd98a');clearTimeout(timer);timer=setTimeout(push,1500);};
   window.lmSyncPush=function(){push(true);};
   window.lmConnCode=function(){return btoa(unescape(encodeURIComponent(JSON.stringify({endpoint:cfg.endpoint,writeToken:cfg.writeToken,readToken:cfg.readToken}))));};
   window.lmLogout=function(){LS.removeItem('lm_sheet_cfg');location.reload();};
