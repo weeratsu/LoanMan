@@ -2,13 +2,13 @@
 <html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LoanMan - บันทึกยืม-คืนเงิน</title>
 <link rel="icon" type="image/svg+xml" href="assets/icon.svg"><link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest">
-<script>window.addEventListener('error',function(e){var b=document.getElementById('errbar');if(b&&e.message&&e.message!=='Script error.'){b.textContent='⚠ '+e.message;b.style.display='block';}});</script><script src="js/vendor/chart.umd.min.js?v=20261105144727"></script>
+<script>window.addEventListener('error',function(e){var b=document.getElementById('errbar');if(b&&e.message&&e.message!=='Script error.'){b.textContent='⚠ '+e.message;b.style.display='block';}});</script><script src="js/vendor/chart.umd.min.js?v=20261105183319"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=20261105144727"></head><body>
+<link rel="stylesheet" href="css/style.css?v=20261105183319"></head><body>
 <header><h1>💰 LoanMan</h1><nav id="nav">
 <button data-t="dash" class="on">ภาพรวม</button><button data-t="txns">รายการยืม/คืน</button><button data-t="period">สรุปงวด</button><button data-t="pred">คาดการณ์</button><button data-t="tl">Timeline</button><span class="navsep"></span><button data-t="people">ลูกหนี้</button><button data-t="debtors">สัญญา</button><button data-t="setup">⚙ Setup</button></nav>
-<span id="selWrap" style="margin-left:auto;color:#cfe0ff">สัญญา (สรุปงวด/คาดการณ์): <select id="selD"></select></span></header>
+<span id="selWrap" style="margin-left:auto;color:#cfe0ff">ลูกหนี้ <select id="selP"></select> สัญญา <select id="selD"></select></span></header>
 <main>
 <section id="t-dash"><div class="kpis" id="kpis"></div>
 <div class="grid2"><div class="card"><h3>ยอดคงค้างตามเวลา</h3><canvas id="cBal"></canvas></div>
@@ -18,8 +18,18 @@
 <div class="card"><h3>สรุปตามสัญญา</h3><div class="tw" id="dashTbl"></div></div></section>
 
 <section id="t-people" class="hide"><div class="card"><h3>เพิ่ม/แก้ไขลูกหนี้</h3><div class="row">
-<input type="hidden" id="pId"><div><label>ชื่อ</label><input id="pName"></div><div><label>ติดต่อ</label><input id="pPhone"></div><div><label>PIN (หน้า public)</label><input id="pPin" autocomplete="off" style="width:120px"></div><div><label>หมายเหตุ</label><input id="pNote" style="width:260px"></div>
-<button class="btn" onclick="savePerson()">บันทึก</button><button class="btn g" onclick="clearPerson()">ล้าง</button></div></div>
+<input type="hidden" id="pId"><div class="pform">
+<div class="pf2"><label>ชื่อ</label><input id="pName"></div>
+<div><label>PIN (หน้า public)</label><input id="pPin" autocomplete="off"></div>
+<div><label>เบอร์โทร</label><input id="pPhone" placeholder="###-###-####" oninput="this.value=fmtPP(this.value)"></div>
+<div class="pfcb"><label><input type="checkbox" id="pIsPP"> เป็น PromptPay</label></div>
+<div><label>ธนาคาร</label><select id="pBk"></select></div>
+<div><label>เลขบัญชี</label><input id="pAcc" placeholder="###-#-######" oninput="this.value=fmtAcc(this.value)"></div>
+<div><label>IG</label><input id="pIg" placeholder="username"></div>
+<div><label>X/Twitter</label><input id="pX" placeholder="username"></div>
+<div class="pf3"><label>หมายเหตุ</label><input id="pNote"></div>
+</div>
+</div></div>
 <div class="card tw" id="peopleTbl"></div></section>
 
 <section id="t-debtors" class="hide"><div class="card"><h3>เพิ่ม/แก้ไขสัญญา</h3><div class="row">
@@ -32,18 +42,19 @@
 <div><label>ต่อ</label><select id="dRateU"><option value="y">ปี</option><option value="m">เดือน</option></select></div>
 <div><label>ค่างวดเริ่มต้น/เดือน (0=ไม่กำหนด)</label><input id="dInst" type="number" step="0.01" style="width:130px"></div>
 <div style="flex-basis:100%"><label>ประวัติค่างวด (มีผลตั้งแต่ → ค่างวด) · เทียบกับวันตัดรอบของแต่ละงวด</label><div id="dInstH"></div><a href="#" class="btn g s" onclick="ihAdd();return false">+ เพิ่มการเปลี่ยนค่างวด</a></div>
-<div><label>วันเริ่ม</label><input id="dStart" type="date"></div>
-<div><label>ยอดต้นยกมา</label><input id="dOpen" type="number" step="0.01" style="width:120px"></div>
-<div><label>ตัดรอบทุกวันที่</label><input id="dDay" type="number" min="1" max="31" style="width:70px"></div>
+<div><label>วันเริ่ม (วันที่ได้เงิน)</label><input id="dStart" type="date"></div>
+<div><label>ยอดต้นยกมา (ยอดกู้ก้อนแรก)</label><input id="dOpen" type="number" step="0.01" style="width:120px"></div>
+<div><label>ตัดรอบ/ครบกำหนดคืน ทุกวันที่</label><input id="dDay" type="number" min="1" max="31" style="width:70px"></div>
 <div><label>Remarks</label><input id="dNote" style="width:320px"></div>
 <button class="btn" onclick="saveDebtor()">บันทึก</button><button class="btn g" onclick="clearDebtor()">ล้าง</button></div>
-<p class="muted">ผ่อนบัตร: ใส่ยอดต้นยกมา = ยอดผ่อน, งวด, ดอก %/ปี (0 = ผ่อน 0%) · เงินสด: ตัดรอบทุกวันที่กำหนด · ดอก = ต้นคงค้างรายวัน × อัตรา/ปี ÷ 365 ตามวันที่ยืม/คืนจริง · จ่ายตัดดอกค้างก่อน · ดอกค้างทบเข้ายอด ณ วันตัดรอบ (แบบ statement ธนาคาร) · รายการถึงวันตัดรอบ (รวมวันนั้น) นับเข้างวดนั้น</p></div>
+<p class="muted" style="color:#c0392b">⚠ ยอดกู้ก้อนแรกใส่ที่ "ยอดต้นยกมา" อย่างเดียว ไม่ต้องคีย์รายการยืมซ้ำ · รายการยืม = ยืมเพิ่มทีหลังเท่านั้น · วันที่คืนจริง คีย์เป็นรายการ "คืน"</p><p class="muted">ผ่อนบัตร: ใส่ยอดต้นยกมา = ยอดผ่อน, งวด, ดอก %/ปี (0 = ผ่อน 0%) · เงินสด: ตัดรอบทุกวันที่กำหนด · แบบ Excel: ดอก = ยอดยกมา × อัตรา/ปี ÷ 365 × วันจากตัดรอบก่อน · trx ตั้งแต่วันตัดรอบนี้ถึงก่อนตัดรอบถัดไป หักในงวดนี้ · รายการถึงวันตัดรอบ (รวมวันนั้น) นับเข้างวดนั้น</p></div>
 <div class="card"><div class="addbar" style="justify-content:space-between"><span class="muted">คลิกหัวคอลัมน์ = เรียง · Shift+คลิก = เพิ่มเงื่อนไขถัดไป</span><button class="btn g s" onclick="resetSort('debtorTbl')">↺ เรียงค่าเริ่มต้น (สถานะ > เริ่ม ใหม่→เก่า)</button></div><div class="filt"><div><label>ลูกหนี้</label><select id="dfP" onchange="setDF('p',this.value)"></select></div><div><label>ประเภท</label><select id="dfK" onchange="setDF('k',this.value)"></select></div><div><label>วิธีจ่าย</label><select id="dfB" onchange="setDF('b',this.value)"></select></div><div><label>สถานะ</label><select id="dfS" onchange="setDF('s',this.value)"></select></div><button class="btn g s" onclick="DF={p:'',k:'',b:'',s:''};safeRender()">ล้าง filter</button></div><div class="tw" id="debtorTbl"></div></div></section>
 
 <section id="t-txns" class="hide"><div class="card"><h3>บันทึกรายการ</h3><div class="row">
 <input type="hidden" id="xId"><div><label>สัญญา</label><select id="xDid"></select></div><div><label>วันที่</label><input id="xDate" type="date"></div>
 <div><label>ประเภท</label><select id="xType"><option value="borrow">ยืม (จ่ายออก)</option><option value="repay">คืน (รับเข้า)</option></select></div>
 <div><label>จำนวนเงิน</label><input id="xAmt" type="number" step="0.01"></div>
+<div id="xDueW"><label>สัญญาจะคืนวันที่</label><input id="xDue" type="date"></div>
 <div><label>วิธีจ่าย</label><select id="xMid"></select></div>
 <div><label>หมายเหตุ</label><input id="xNote"></div>
 <button class="btn" onclick="saveTxn()">บันทึก</button><button class="btn g" onclick="clearTxn()">ล้าง</button></div></div>
@@ -62,7 +73,7 @@
 
 <section id="t-setup" class="hide"><div class="card"><h3>Google Sheet Sync</h3><div class="row"><label style="display:flex;gap:6px;align-items:center;font-size:14px;color:#222"><input type="checkbox" id="syncOff" onchange="lmSyncSet(this.checked)"> หยุด sync ชั่วคราว (local only)</label><button class="btn" onclick="lmSyncPush()">☁ Push ขึ้น Sheet ตอนนี้</button><button class="btn g" onclick="if(window.lmConnCode){navigator.clipboard.writeText(lmConnCode());alert('คัดลอกแล้ว — ไปวางที่ login.html บนเว็บ/มือถือ');}">📋 คัดลอกรหัสเชื่อมต่อ</button><button class="btn g" onclick="lmLogout&&lmLogout()">ออกจาก sync (browser นี้)</button></div><p class="muted">บันทึกลงเครื่องก่อน แล้ว sync ขึ้น Sheet อัตโนมัติ · ข้อมูลลูกหนี้ (เข้ารหัส PIN) อัปเดตให้ LoanManPublic ทุกครั้งที่ sync</p></div>
 <div class="card"><h3>💾 สำรอง/กู้คืนข้อมูล</h3><div class="row">
-<button class="btn" onclick="exportJ()">Export JSON</button><button class="btn" onclick="exportPublic()">🔒 Export Public (data.js)</button><input type="file" id="imp" accept=".json" onchange="importJ(this)">
+<button class="btn" onclick="exportJ()">Export JSON</button><button class="btn" onclick="exportPublic()">🔒 Export Public (data.js)</button><label class="btn" style="cursor:pointer;margin:0">📥 Import (.json)<input type="file" id="imp" accept=".json" onchange="importJ(this);this.value=''" style="display:none"></label>
 </div>
 <p class="muted">Export JSON = สำรองทั้งหมด · Import = กู้คืน/เพิ่มสัญญา · Export Public = data.js สำรอง (กรณี Sheet ใช้ไม่ได้)</p></div><div class="card"><h3>Master: ธนาคาร</h3><div class="row">
 <input type="hidden" id="bId"><div><label>ชื่อย่อ</label><input id="bName" placeholder="เช่น KBank"></div><div><label>ชื่อเต็ม</label><input id="bFull"></div><div><label>หมายเหตุ</label><input id="bNote"></div>
@@ -79,24 +90,24 @@
 
 
 </main>
-<script src="js/storage.js?v=20261105144727"></script>
-<script src="js/utils.js?v=20261105144727"></script>
-<script src="js/table-search.js?v=20261105144727"></script>
-<script src="js/table-sort.js?v=20261105144727"></script>
-<script src="js/engine.js?v=20261105144727"></script>
-<script src="js/charts.js?v=20261105144727"></script>
-<script src="js/ui-dashboard.js?v=20261105144727"></script>
-<script src="js/ui-people.js?v=20261105144727"></script>
-<script src="js/ui-debtors.js?v=20261105144727"></script>
-<script src="js/ui-txns.js?v=20261105144727"></script>
-<script src="js/ui-period.js?v=20261105144727"></script>
-<script src="js/ui-timeline.js?v=20261105144727"></script>
-<script src="js/ui-predict.js?v=20261105144727"></script>
-<script src="js/ui-setup.js?v=20261105144727"></script>
-<script src="js/pin-crypto.js?v=20261105144727"></script>
-<script src="js/ui-data.js?v=20261105144727"></script>
-<script src="js/modal.js?v=20261105144727"></script>
+<script src="js/storage.js?v=20261105183319"></script>
+<script src="js/utils.js?v=20261105183319"></script>
+<script src="js/table-search.js?v=20261105183319"></script>
+<script src="js/table-sort.js?v=20261105183319"></script>
+<script src="js/engine.js?v=20261105183319"></script>
+<script src="js/charts.js?v=20261105183319"></script>
+<script src="js/ui-dashboard.js?v=20261105183319"></script>
+<script src="js/ui-people.js?v=20261105183319"></script>
+<script src="js/ui-debtors.js?v=20261105183319"></script>
+<script src="js/ui-txns.js?v=20261105183319"></script>
+<script src="js/ui-period.js?v=20261105183319"></script>
+<script src="js/ui-timeline.js?v=20261105183319"></script>
+<script src="js/ui-predict.js?v=20261105183319"></script>
+<script src="js/ui-setup.js?v=20261105183319"></script>
+<script src="js/pin-crypto.js?v=20261105183319"></script>
+<script src="js/ui-data.js?v=20261105183319"></script>
+<script src="js/modal.js?v=20261105183319"></script>
 <script src="js/config-sheet.js"></script>
-<script src="js/sheet-sync.js?v=20261105144727"></script>
-<script src="js/app.js?v=20261105144727"></script>
+<script src="js/sheet-sync.js?v=20261105183319"></script>
+<script src="js/app.js?v=20261105183319"></script>
 </body></html>

@@ -1,5 +1,11 @@
-function renderSel(){var s=$('selD');s.innerHTML=opts(DB.debtors.map(function(d){return [d.id,cLabel(d)]}),cur)||'<option value="">-</option>';
-  if(!getD(cur)&&DB.debtors[0])cur=DB.debtors[0].id;s.value=cur;var d=getD(cur);document.querySelectorAll('.dn').forEach(function(e){e.textContent=d?cLabel(d):'-'});}
+function renderSel(){var s=$('selD'),sp=$('selP'),d0=getD(cur);
+  if(!d0&&DB.debtors[0]){cur=DB.debtors[0].id;d0=getD(cur);}
+  var pid=sp&&sp.value?sp.value:(d0?d0.pid:'');if(d0&&pid&&d0.pid!==pid)pid=d0.pid;
+  if(sp)sp.innerHTML=DB.people.map(function(p){return '<option value="'+p.id+'"'+(p.id===pid?' selected':'')+'>'+p.name+'</option>'}).join('');
+  var L=DB.debtors.filter(function(d){return !pid||d.pid===pid}).map(function(d){return {d:d,cl:isClosed(d,calc(d,0,0))}}).sort(function(a,b){return (a.cl-b.cl)||(b.d.start||'').localeCompare(a.d.start||'')});
+  if(L.length&&!L.some(function(o){return o.d.id===cur}))cur=L[0].d.id;
+  s.innerHTML=L.map(function(o){return '<option value="'+o.d.id+'"'+(o.d.id===cur?' selected':'')+(o.cl?' style="color:#999"':'')+'>'+o.d.name+(o.cl?' (ปิดแล้ว)':'')+'</option>'}).join('')||'<option value="">-</option>';
+  var d=getD(cur);document.querySelectorAll('.dn').forEach(function(e){e.textContent=d?cLabel(d):'-'});}
 function sumRow(lbl,c,extra){return '<td>'+f(c.lent)+'</td><td>'+f(c.paid)+'</td><td>'+f(c.pI)+'</td><td class="pos">'+f(c.P)+'</td><td>'+f(c.I)+'</td><td><b>'+f(c.P+c.I)+'</b></td>';}
 function renderDash(){var C={},T={lent:0,paid:0,pI:0,P:0,I:0,n:0},PP={},ms={};
   DB.debtors.forEach(function(d){var c=C[d.id]=calc(d,0,0),cl=isClosed(d,c);if(!cl)T.n++;
