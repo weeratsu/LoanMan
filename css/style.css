@@ -43,3 +43,21 @@ tr.clk{cursor:pointer}tr.clk:hover td{background:#e3ecfa!important}
 .tlax{display:flex;justify-content:space-between;font-size:11px;color:#888;margin-top:6px}
 .tlh{margin-bottom:6px}.tlh span{white-space:nowrap}
 .pform{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 12px;width:100%}.pform input,.pform select{width:100%;box-sizing:border-box}.pf2{grid-column:span 3}.pf3{grid-column:1/-1}.pfcb{display:flex;align-items:flex-end;padding-bottom:8px}.pfcb label{display:flex;gap:6px;align-items:center;font-size:13px;color:#222}.pfcb input{width:auto}@media(max-width:700px){.pform{grid-template-columns:1fr 1fr}.pf2{grid-column:1/-1}}
+
+/* ---- mobile ---- */
+html,body{max-width:100%;overflow-x:hidden}
+main,.card,.grid2>*,.kpis>*{min-width:0}
+canvas{max-width:100%!important}
+@media(max-width:700px){
+ header{padding:8px 10px;gap:6px}header h1{font-size:16px;margin:0}
+ nav#nav{display:flex;flex-wrap:nowrap;overflow-x:auto;width:100%;-webkit-overflow-scrolling:touch;scrollbar-width:none}nav#nav::-webkit-scrollbar{display:none}
+ nav#nav button{flex:0 0 auto;padding:6px 10px;font-size:13px}.navsep{display:none}
+ #selWrap{margin-left:0!important;width:100%;display:flex;gap:6px;align-items:center;flex-wrap:wrap}#selWrap select{flex:1;min-width:0}
+ main{padding:10px}.card{padding:10px}
+ .kpis{grid-template-columns:1fr 1fr;gap:8px}.kpi b{font-size:16px}
+ .row>div{flex:1 1 140px}.row input,.row select{width:100%!important;box-sizing:border-box}
+ .tsbar input{width:100%}.filt>div{flex:1 1 45%}.filt select{width:100%}
+ .mbox{padding:12px}.mbg{padding:20px 8px}
+ .tlh span{white-space:normal;margin-left:0}
+ #syncBadge{bottom:8px;right:8px;font-size:11px}
+}
