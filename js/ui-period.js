@@ -11,3 +11,9 @@ function perChart(id,c){var L=c.per.map(function(p){return p.b});
 function renderPeriod(){var d=getD(cur);if(!d){$('perTbl').innerHTML='';return;}var c=calc(d);
   $('perTbl').innerHTML=perRows(c,d);perChart('cPer',c);
   setTimeout(function(){scrollLatest('perTbl')},0);}
+
+/* คลิกสัญญา → กระพริบแถวงวดที่มีรายการล่าสุด */
+function flashLatest(){setTimeout(function(){var d=getD(cur),box=$('perTbl');if(!d||!box)return;var tx=txOf(d.id),t=tx[tx.length-1];if(!t)return;var c=calc(d);
+  var p=c.per.find(function(p){return t.date>=p.b&&t.date<(p.nb||'9999')})||c.per.find(function(p){return t.date<=p.b});if(!p)return;
+  var tr=[].find.call(box.querySelectorAll('tr'),function(r){return r.cells[1]&&r.cells[1].textContent.trim().indexOf(p.b)===0});if(!tr)return;
+  box.scrollTop=Math.max(tr.offsetTop-box.clientHeight/2,0);tr.classList.remove('flash');void tr.offsetWidth;tr.classList.add('flash');},350);}
