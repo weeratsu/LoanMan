@@ -62,3 +62,5 @@ canvas{max-width:100%!important}
  #syncBadge{bottom:8px;right:8px;font-size:11px}
 }
 @keyframes lmflash{0%,100%{background:transparent}25%,75%{background:#ffe08a}}tr.flash td{animation:lmflash 1.6s ease 1}
+.shgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}.shp{display:flex!important;gap:6px;align-items:center;font-size:13px!important;color:#222!important;background:#f5f8fc;padding:4px 8px;border-radius:6px;margin:0!important}.shp input[type=number]{width:90px;margin-left:auto}
+.btn.addp{display:inline-flex;align-items:center;text-decoration:none;user-select:none;white-space:nowrap}

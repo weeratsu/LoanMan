@@ -5,7 +5,11 @@ function importJ(el){var r=new FileReader();r.onload=function(){try{var j=JSON.p
 function pubPayload(p){var ds=DB.debtors.filter(function(d){return d.pid===p.id}).map(function(d){var o=JSON.parse(JSON.stringify(d));delete o.note;o.mname=d.mid?mName(d.mid):'';
   if(o.rows)o.rows.forEach(function(r){delete r.rm});return o;}),ids=ds.map(function(d){return d.id});
   var tx=DB.txns.filter(function(t){return ids.indexOf(t.did)>=0}).map(function(t){return {id:t.id,did:t.did,date:t.date,type:t.type,amt:t.amt,note:t.note||'',m:t.mid?mName(t.mid):''}});
-  return {people:[{id:p.id,name:p.name}],debtors:ds,txns:tx,at:new Date().toISOString()};}
+  var sh=null;if(typeof shNet==='function'&&(DB.shares||[]).length){var N=shNet(),me=N.find(function(x){return x.id===p.id});
+    var it=shOcc().filter(function(s){return s.payer===p.id||(p.id in s.split)}).map(function(s){return {date:s.date,title:s.title||'',amt:s.amt,payer:s.payer===p.id?'คุณ':shName(s.payer),mine:s.split[p.id]||0,settle:!!s.settle}});
+    var st=shSettleList(N).filter(function(x){return x.from===p.id||x.to===p.id}).map(function(x){return {from:x.from===p.id?'คุณ':shName(x.from),to:x.to===p.id?'คุณ':shName(x.to),amt:x.amt}});
+    if(it.length)sh={net:me?me.net:0,items:it,settle:st};}
+  return {people:[{id:p.id,name:p.name}],debtors:ds,txns:tx,shares:sh,at:new Date().toISOString()};}
 async function exportPublic(){var ps=DB.people.filter(function(p){return p.pin});if(!ps.length)return alert('ยังไม่มีลูกหนี้ที่ตั้ง PIN (หน้าลูกหนี้)');
   var weak=ps.filter(function(p){return p.pin.length<6}).map(function(p){return p.name});
   var items=[];for(var i=0;i<ps.length;i++)items.push(await lmEnc(ps[i].pin,pubPayload(ps[i])));

@@ -7,7 +7,7 @@
     if(/^https?:$/.test(location.protocol)){var _p=function(){var a=document.createElement('a');a.href='login.html';a.textContent='🔐 Login sync';a.style.cssText='position:fixed;left:12px;bottom:12px;z-index:9999;background:#2a64b8;color:#fff;padding:8px 14px;border-radius:20px;font-size:13px;text-decoration:none;box-shadow:0 2px 8px #0003';document.body.appendChild(a);};if(document.body)_p();else window.addEventListener('DOMContentLoaded',_p);}
     return;}
   window.LM_SYNC_ON=true;
-  var TBL=['people','debtors','txns','banks','methods'],DIRTY='loanman_dirty',timer=null,busy=false,again=false;
+  var TBL=['people','debtors','txns','banks','methods','shares'],DIRTY='loanman_dirty',timer=null,busy=false,again=false;
   function paused(){return LS.getItem('loanman_sync_off')==='1';}
   function badge(t,c){var b=document.getElementById('syncBadge');if(!b){b=document.createElement('div');b.id='syncBadge';b.style.cssText='position:fixed;right:12px;bottom:12px;z-index:9999;background:#1f3b63;padding:6px 12px;border-radius:16px;font-size:12px;box-shadow:0 2px 8px #0003;transition:opacity .4s';(document.body||document.documentElement).appendChild(b);}clearTimeout(b._h);b.style.opacity='1';b.textContent=t;b.style.color=c||'#cfe0ff';if(/^☁/.test(t))b._h=setTimeout(function(){b.style.opacity='.55'},4000);}
   function sleep(ms){return new Promise(function(r){setTimeout(r,ms)});}
@@ -23,9 +23,9 @@
   function merge(a,b){var o={};TBL.forEach(function(t){var m={};(a[t]||[]).forEach(function(r){m[r.id]=r});(b[t]||[]).forEach(function(r){var x=m[r.id];if(!x||(r.u||0)>(x.u||0))m[r.id]=r;});o[t]=Object.keys(m).map(function(k){return m[k]});});
     var del={};(a.deleted||[]).concat(b.deleted||[]).forEach(function(d){if(d&&d.k&&(!del[d.k]||d.u>del[d.k]))del[d.k]=d.u;});
     Object.keys(del).forEach(function(k){var i=k.indexOf(':'),t=k.slice(0,i),id=k.slice(i+1);if(o[t])o[t]=o[t].filter(function(r){return !(r.id===id&&(r.u||0)<=del[k])});});
-    o.deleted=Object.keys(del).map(function(k){return {k:k,u:del[k]}});return o;}
+    o.settings=b.settings||a.settings;o.deleted=Object.keys(del).map(function(k){return {k:k,u:del[k]}});return o;}
   function sig(d){return JSON.stringify(TBL.map(function(t){return (d[t]||[]).map(function(r){return r.id+'@'+(r.u||0)}).sort()}))+(d.deleted||[]).length;}
-  function adopt(m){var before=sig(DB);TBL.concat(['deleted']).forEach(function(t){DB[t]=m[t];});_save();SN=snap();
+  function adopt(m){if(m.settings&&m.settings[0]&&m.settings[0].name&&!DB.meName)DB.meName=m.settings[0].name;var before=sig(DB);TBL.concat(['deleted']).forEach(function(t){DB[t]=m[t];});_save();SN=snap();
     if(sig(DB)!==before){if(typeof migrate==='function')migrate();if(typeof safeRender==='function')safeRender();return true;}return false;}
   async function getSheet(){var r=await fetchJson(cfg.endpoint+'?token='+encodeURIComponent(cfg.readToken)+'&t='+Date.now());if(!r||!r.ok)throw new Error(r&&r.error||'pull failed');return r.data||{};}
   async function pubItems(){if(typeof lmEnc!=='function'||typeof pubPayload!=='function'||!window.crypto||!crypto.subtle)return null;var out=[],ps=(DB.people||[]).filter(function(p){return p.pin});for(var i=0;i<ps.length;i++)out.push(await lmEnc(ps[i].pin,pubPayload(ps[i])));return out.sort(function(){return Math.random()-.5});}
@@ -33,7 +33,7 @@
     if(paused()&&!force)return;if(busy){again=true;return;}busy=true;badge('↑ syncing…');
     try{var sv=await getSheet(),m=merge(sv,DB);adopt(m);
       if(!real(DB)){badge('⚠ ข้อมูลว่าง ไม่ push','#ffb4a8');busy=false;return;}
-      var pub=await pubItems(),body={token:cfg.writeToken,mod:Date.now(),data:{deleted:DB.deleted||[]},pub:pub};TBL.forEach(function(t){body.data[t]=DB[t]||[];});
+      var pub=await pubItems(),body={token:cfg.writeToken,mod:Date.now(),data:{deleted:DB.deleted||[],settings:[{id:'me',name:DB.meName||''}]},pub:pub};TBL.forEach(function(t){body.data[t]=DB[t]||[];});
       var res=await fetchJson(cfg.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});
       if(!res||!res.ok)throw new Error(res&&res.error||'push failed');
       LS.removeItem(DIRTY);badge('☁ synced '+new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}),'#9fe3b4');

@@ -1,6 +1,6 @@
 /* Popup: ฟอร์มเพิ่ม/แก้ไข + alert/confirm (Enter=บันทึก, Esc=ยกเลิก, คลิกนอก popup ไม่ปิด) */
 var FORMS=[{id:'pId',t:'ลูกหนี้',e:'editPerson',s:'savePerson',c:'clearPerson'},{id:'dId',t:'สัญญา',e:'editDebtor',s:'saveDebtor',c:'clearDebtor'},
- {id:'xId',t:'รายการยืม/คืน',e:'editTxn',s:'saveTxn',c:'clearTxn'},{id:'bId',t:'ธนาคาร',e:'editB',s:'saveB',c:'clearB'},{id:'mId',t:'วิธีจ่าย',e:'editM',s:'saveM',c:'clearM'}];
+ {id:'xId',t:'รายการยืม/คืน',e:'editTxn',s:'saveTxn',c:'clearTxn'},{id:'bId',t:'ธนาคาร',e:'editB',s:'saveB',c:'clearB'},{id:'mId',t:'วิธีจ่าย',e:'editM',s:'saveM',c:'clearM'},{id:'sId',t:'รายการแชร์',e:'editS',s:'saveS',c:'clearS'}];
 var MOD=null;
 function mkBg(){var bg=document.createElement('div');bg.className='mbg';bg.style.display='none';document.body.appendChild(bg);return bg;}
 function openM(bg){bg.style.display='flex';MOD=bg;var i=bg.querySelector('input:not([type=hidden]),select');if(i)setTimeout(function(){i.focus()},30);}
