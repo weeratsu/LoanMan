@@ -21,7 +21,7 @@ function saveTxn(){if($('xDid').value==='__new'){var nm=$('xNewP').value.trim();
   var o=document.createElement('option');o.value=c.id;$('xDid').appendChild(o);$('xDid').value=c.id;}
   var did=$('xDid').value,a=+$('xAmt').value,dt=$('xDate').value;if(!did)return alert('เลือกสัญญา');if(!a||!dt)return alert('ใส่วันที่และจำนวน');
   var id=$('xId').value||uid(),t=DB.txns.find(function(x){return x.id===id}),o={id:id,did:did,date:dt,type:$('xType').value,amt:Math.abs(a),ts:(t&&t.ts)||Date.now(),mid:$('xMid').value,due:$('xType').value==='borrow'?$('xDue').value:'',note:$('xNote').value};
-  if(t)Object.assign(t,o);else DB.txns.push(o);save();clearTxn();safeRender();}
+  if(t)Object.assign(t,o);else DB.txns.push(o);save();clearTxn();safeRender();askClose(did);}
 function editTxn(id){var t=DB.txns.find(function(x){return x.id===id});$('xId').value=t.id;$('xDid').value=t.did;$('xDate').value=t.date;$('xType').value=t.type;$('xAmt').value=t.amt;$('xMid').value=t.mid||'';$('xDue').value=t.due||'';$('xNote').value=t.note||'';window.scrollTo(0,0);}
 function clearTxn(){$('xId').value='';$('xAmt').value='';$('xNote').value='';$('xDue').value='';if($('xNewP'))$('xNewP').value='';$('xDate').value=today();}
 function delTxn(id){if(!confirm('ลบรายการ?'))return;DB.txns=DB.txns.filter(function(x){return x.id!==id});save();safeRender();}
@@ -29,3 +29,5 @@ function delTxn(id){if(!confirm('ลบรายการ?'))return;DB.txns=DB.t
 document.addEventListener('change',function(e){if(e.target&&e.target.id==='xType'){var w=$('xDueW');if(w)w.style.display=e.target.value==='borrow'?'':'none';}});
 
 function xNewToggle(){var n=$('xDid')&&$('xDid').value==='__new',w=$('xNewW');if(w)w.style.display=n?'':'none';if(n&&$('xNewP'))setTimeout(function(){$('xNewP').focus()},30);}
+
+function askClose(did){var d=getD(did);if(!d||d.status==='closed')return;var c=calc(d,0,0);if(c.P>0.005||!txOf(did).length)return;setTimeout(function(){if(confirm('ยอดคงค้างของ "'+d.name+'" เป็น 0 แล้ว\nปิดสัญญานี้เลยไหม?')){d.status='closed';save();safeRender();}},50);}
