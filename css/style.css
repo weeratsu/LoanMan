@@ -70,3 +70,7 @@ canvas{max-width:100%!important}
 .mbox input,.mbox select,.mbox textarea{width:100%!important;max-width:100%;min-width:0;box-sizing:border-box;font-size:16px}
 .mbox input[type=date]{-webkit-appearance:none;appearance:none;display:block;min-height:42px;text-align:left;color:inherit}
 .mbox .mft{position:sticky;bottom:-14px;background:#fff;padding-bottom:4px}.mbox .mft .btn{flex:1}}
+/* mobile-list: รายการยืม/คืนพอดีจอ 1 บรรทัด */
+.mob{display:none}
+@media(max-width:640px){#txnTbl table{font-size:12px}#txnTbl td,#txnTbl th{padding:6px 4px}#txnTbl .dk{display:none}#txnTbl .mob{display:table-cell;text-align:right;font-weight:600;white-space:nowrap}
+#txnTbl td.cn{max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#txnTbl .btn.s{padding:3px 6px;font-size:11px}#txnTbl tr.tot{display:none}}
