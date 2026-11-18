@@ -64,3 +64,9 @@ canvas{max-width:100%!important}
 @keyframes lmflash{0%,100%{background:transparent}25%,75%{background:#ffe08a}}tr.flash td{animation:lmflash 1.6s ease 1}
 .shgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}.shp{display:flex!important;gap:6px;align-items:center;font-size:13px!important;color:#222!important;background:#f5f8fc;padding:4px 8px;border-radius:6px;margin:0!important}.shp input[type=number]{width:90px;margin-left:auto}
 .btn.addp{display:inline-flex;align-items:center;text-decoration:none;user-select:none;white-space:nowrap}
+/* mobile-form: popup ฟอร์มพอดีจอ ไม่ต้องเลื่อนซ้ายขวา */
+@media(max-width:640px){.mbg{padding:10px 8px}.mbox{padding:14px;max-width:100%;box-sizing:border-box;overflow-x:hidden}
+.mbox .row{flex-direction:column;align-items:stretch;gap:8px}.mbox .row>div{width:100%;min-width:0}
+.mbox input,.mbox select,.mbox textarea{width:100%!important;max-width:100%;min-width:0;box-sizing:border-box;font-size:16px}
+.mbox input[type=date]{-webkit-appearance:none;appearance:none;display:block;min-height:42px;text-align:left}
+.mbox .mft{position:sticky;bottom:-14px;background:#fff;padding-bottom:4px}.mbox .mft .btn{flex:1}}
