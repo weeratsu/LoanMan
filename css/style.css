@@ -9,7 +9,7 @@ main{padding:16px;max-width:1300px;margin:auto}.card{background:#fff;border-radi
 .kpi{background:#fff;border-radius:10px;padding:12px;box-shadow:0 1px 3px #0002}.kpi b{display:block;font-size:20px;margin-top:4px}.kpi small{color:#666}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:900px){.grid2{grid-template-columns:1fr}}
 table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:6px 8px;border-bottom:1px solid #eee;text-align:right;white-space:nowrap}
-th{background:#f0f3f8;position:sticky;top:0}td.l,th.l{text-align:left}.tw{overflow:auto;max-height:520px}
+th{background:#f0f3f8;position:sticky;top:0}td.l,th.l{text-align:left;color:inherit}.tw{overflow:auto;max-height:520px}
 input,select{padding:6px 8px;border:1px solid #ccc;border-radius:6px;font-size:14px}label{font-size:12px;color:#555;display:block;margin-bottom:2px}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}.btn{background:#2a64b8;color:#fff;border:0;padding:7px 14px;border-radius:6px;cursor:pointer}
 .btn.g{background:#888}.btn.r{background:#c0392b}.btn.s{padding:3px 8px;font-size:12px}
@@ -66,7 +66,7 @@ canvas{max-width:100%!important}
 .btn.addp{display:inline-flex;align-items:center;text-decoration:none;user-select:none;white-space:nowrap}
 /* mobile-form: popup ฟอร์มพอดีจอ ไม่ต้องเลื่อนซ้ายขวา */
 @media(max-width:640px){.mbg{padding:10px 8px}.mbox{padding:14px;max-width:100%;box-sizing:border-box;overflow-x:hidden}
-.mbox .row{flex-direction:column;align-items:stretch;gap:8px}.mbox .row>div{width:100%;min-width:0}
+.mbox .row{flex-direction:column;align-items:stretch;gap:8px}.mbox .row>div{width:100%;min-width:0;flex:0 0 auto!important;height:auto!important;margin:0}.mbox .row>div label{margin-bottom:4px}.mbox input,.mbox select{min-height:44px}
 .mbox input,.mbox select,.mbox textarea{width:100%!important;max-width:100%;min-width:0;box-sizing:border-box;font-size:16px}
-.mbox input[type=date]{-webkit-appearance:none;appearance:none;display:block;min-height:42px;text-align:left}
+.mbox input[type=date]{-webkit-appearance:none;appearance:none;display:block;min-height:42px;text-align:left;color:inherit}
 .mbox .mft{position:sticky;bottom:-14px;background:#fff;padding-bottom:4px}.mbox .mft .btn{flex:1}}
